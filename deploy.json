@@ -1,0 +1,7 @@
+{
+    "name": "cms-server",
+    "script": "npm",
+    "args": "restart",
+    "max_memory_restart": "100M",
+    "watch": true
+  }
