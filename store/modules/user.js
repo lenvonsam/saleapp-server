@@ -16,11 +16,10 @@ export default {
       commit('EXITUSER')
     }
   },
-  state: {
+  state: () => ({
     currentUser: {},
-    currentAuth: [],
     isLogin: false
-  },
+  }),
   mutations: {
     SETUSER(state, usr) {
       state.currentUser = usr
