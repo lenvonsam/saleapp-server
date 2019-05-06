@@ -1,4 +1,4 @@
-export default {
+export default () => ({
   navToggle: false,
   pageSize: 8,
   fileUploadUrl: '/fileUpload',
@@ -59,4 +59,4 @@ export default {
       ]
     }
   ]
-}
+})
