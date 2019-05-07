@@ -74,11 +74,15 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    // postcss: [
-    //   require('autoprefixer')({
-    //     browsers: ['last 1 version', '> 1%', 'IE 10', 'Firefox > 20']
-    //   })
-    // ],
+    postcss: {
+      plugins: {
+        'postcss-import': {},
+        'postcss-url': {},
+        'postcss-preset-env': {},
+        cssnano: { preset: 'default' } // disabled in dev mode
+      },
+      order: 'cssnanoLast'
+    },
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
