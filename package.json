@@ -16,7 +16,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
     "cross-env": "^5.2.0",
-    "element-ui": "^2.4.6",
+    "element-ui": "^2.4.11",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
     "koa-bodyparser": "^3.2.0",
@@ -25,7 +25,7 @@
     "koa-session": "^5.10.1",
     "koa-session-minimal": "^3.0.4",
     "lodash": "^4.17.11",
-    "nuxt": "^2.2.0",
+    "nuxt": "^2.4.0",
     "quill-image-extend-module": "^1.1.2",
     "request": "^2.88.0",
     "sha1": "^1.1.1",

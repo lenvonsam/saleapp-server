@@ -46,7 +46,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/element-ui',
+    { src: '@/plugins/element-ui', ssr: false },
     '@/plugins/mixins',
     '@/plugins/vue-component',
     '@/plugins/filter',
@@ -74,11 +74,11 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    postcss: [
-      require('autoprefixer')({
-        browsers: ['last 1 version', '> 1%', 'IE 10', 'Firefox > 20']
-      })
-    ],
+    // postcss: [
+    //   require('autoprefixer')({
+    //     browsers: ['last 1 version', '> 1%', 'IE 10', 'Firefox > 20']
+    //   })
+    // ],
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
