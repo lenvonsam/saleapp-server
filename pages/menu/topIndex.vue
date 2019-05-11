@@ -1,6 +1,6 @@
 <template lang="pug">
 i-box(:topHidden="false", title="菜单列表")
-  b-table(:tableValue="tableConfig", :loading="dataLoad", @rightTopSearch="topSearch", @actionBtnClick="btnGroupClick", :total="totalRecords", @rowEdit="rowCellEdit")
+  b-table(:tableValue="tableConfig", :loading="dataLoad", @rightTopSearch="topSearch", @actionBtnClick="btnGroupClick", :total="totalRecords", @rowEdit="rowCellEdit", @pageChange="tablePgChange")
   el-dialog(:visible.sync="dialogVisible", :title="'账户' + (formEditType == 1 ? '新增' : '修改')")
     b-form(:basicformConfig="formConfig", :modelForm="menuObj", :formCancel="dialogFormCancel", :resetForm="dialogVisible", @formSubmit="formResult")
       template(slot="append")
@@ -142,6 +142,11 @@ export default {
     this.callMenuList()
   },
   methods: {
+    tablePgChange(val) {
+      console.log('pg change', val)
+      this.currentPage = val - 1
+      this.callMenuList()
+    },
     formResult(obj) {
       this.menuObj = Object.assign({}, obj)
       this.dialogVisible = false

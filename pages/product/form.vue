@@ -196,7 +196,7 @@ export default {
           this.apiList.productDetail + this.$route.query.id
         )
         if (data.return_code === 0) {
-          this.formObj = Object.assign({}, data.obj)
+          this.formObj = data.obj
           this.merchantName = data.obj.merchant.name
           this.merchantId = data.obj.merchant.id
           if (this.formObj.coverImages)

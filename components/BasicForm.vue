@@ -56,46 +56,48 @@ export default {
     },
     modelForm: {
       handler: function(newVal, oldVal) {
-        console.log('form value change')
-        let keys = Object.keys(newVal)
-        if (keys.length == 0) {
-          Object.keys(this.localForm).map(itm => {
-            this.localForm[itm] = ''
-          })
-        } else {
-          console.log('keys:>>', keys)
-          keys.map(itm => {
-            this.localForm[itm] = newVal[itm]
-          })
-          this.$forceUpdate()
-          console.log('after change :>>', this.localForm)
-        }
+        this.localForm = Object.assign({}, newVal)
+        // console.log('form value change')
+        // let keys = Object.keys(newVal)
+        // if (keys.length == 0) {
+        //   Object.keys(this.localForm).map(itm => {
+        //     this.localForm[itm] = ''
+        //   })
+        // } else {
+        //   console.log('keys:>>', keys)
+        //   keys.map(itm => {
+        //     this.localForm[itm] = newVal[itm]
+        //   })
+        this.$forceUpdate()
+        console.log('after change :>>', this.localForm)
+        // }
       },
       deep: true
     }
   },
   beforeMount() {
     console.log('beforeMount basicform', this.modelForm)
-    this.$nextTick(function() {
-      this.localForm = Object.assign({}, this.modelForm)
-      let selectConfigArr = this.basicformConfig.formHeader.filter(
-        itm =>
-          itm.type == 'select' &&
-          (itm.dataType == 'api' || itm.dataType == 'globalArray')
-      )
-      if (selectConfigArr.length > 0) {
-        const me = this
-        // this.localForm = Object.assign({}, this.modelForm)
-        selectConfigArr.map(itm => {
-          if (!me.localForm[itm.listName]) {
-            me.localForm[itm.listName] = []
-            if (itm.dataType === 'api') me.getSelectVal(itm)
-            if (itm.dataType === 'globalArray') me.getGlobalSelectVal(itm)
-          }
-        })
-      }
-      this.$forceUpdate()
-    })
+    // this.$nextTick(function() {
+    this.localForm = Object.assign(this.localForm, this.modelForm)
+    // this.localForm = this.modelForm
+    let selectConfigArr = this.basicformConfig.formHeader.filter(
+      itm =>
+        itm.type == 'select' &&
+        (itm.dataType == 'api' || itm.dataType == 'globalArray')
+    )
+    if (selectConfigArr.length > 0) {
+      const me = this
+      // this.localForm = Object.assign({}, this.modelForm)
+      selectConfigArr.map(itm => {
+        if (!me.localForm[itm.listName]) {
+          me.localForm[itm.listName] = []
+          if (itm.dataType === 'api') me.getSelectVal(itm)
+          if (itm.dataType === 'globalArray') me.getGlobalSelectVal(itm)
+        }
+      })
+    }
+    // this.$forceUpdate()
+    // })
   },
   methods: {
     datepickerChange(dateval) {

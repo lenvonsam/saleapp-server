@@ -9,7 +9,7 @@
           el-date-picker(v-model="endTime", format="yyyy-MM-dd HH:mm:ss", value-format="yyyy-MM-dd HH:mm:ss", type="datetime", style="width: 70%")
         el-form-item(label="活动背景", required)
           single-pic-upload(v-model="logoImg", :extra="fileExt")
-        el-form-item(label="活动攻略", required)
+        //- el-form-item(label="活动攻略", required)
           el-col(:span="13")
             q-editor(v-model="activityRichContent")
           el-col.pl-15(:span="11")

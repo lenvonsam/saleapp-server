@@ -15,7 +15,7 @@ export default async function({ redirect, route, store }) {
         let groupAuth = userAuthGroup[k]
         let firstMenu = {
           title: groupAuth[0].menu.parent.name,
-          iconClass: groupAuth[0].menu.parent.iconClass
+          iconClass: groupAuth[0].menu.parent.iconName
         }
         let allMenus = []
         groupAuth.map(itm => {

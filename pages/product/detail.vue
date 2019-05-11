@@ -13,15 +13,15 @@
       el-tag.mt-15 商品封面/分享图
       el-row.mt-15
         el-col(:span="12")
-          .padding
+          .padding.text-center
             img(:src="formObj.coverImages.url")
           .text-center.mt-5 商品封面
         el-col(:span="12")
           template(v-if="formObj.shareImg")
-            .padding
+            .padding.text-center
               img(:src="formObj.shareImg.url")
             .text-center.mt-5 商品分享图
-          .text-center 暂无
+          .text-center(v-else) 暂无
     el-tag.mt-15 商品轮播图
     .mt-15(style="width: 70%")
       el-carousel(indicator-position="none")

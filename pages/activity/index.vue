@@ -8,7 +8,7 @@
   b-table.mt-15(:tableValue="prdValue", :rightPart="false", @rowEdit="tableRowEdit")
   el-dialog(:visible.sync="dialogShow")
     template(v-if="rowType == 'preview'")
-      div(v-html="currentObj.strategy", v-if="currentObj.strategy && currentObj.strategy.length > 0") 123
+      .modal-preview(v-html="currentObj.strategy", v-if="currentObj.strategy && currentObj.strategy.length > 0") 123
       .padding.text-center(v-else) 暂无攻略
     template(v-else-if="rowType == 'addProduct'")
       el-form

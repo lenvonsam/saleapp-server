@@ -24,9 +24,7 @@ div
           span {{head.factValue(scope.row)}}
       el-table-column(v-else-if="head.type == 'image'", :label="head.lbl", :width="head.width? head.width: 'auto'")
         template(slot-scope="scope")
-          img(:src="head.factValue(scope.row[head.prop])", @click="previewShow = true", style="max-height: 200px; width: 100%")
-          el-dialog(:visible="previewShow", @close="previewShow = false", append-to-body)
-            img(:src="head.factValue(scope.row[head.prop])", width="100%")
+          img(:src="head.factValue(scope.row[head.prop])", @click="openRowImgModal(head.factValue(scope.row[head.prop]))", style="height: 100%; width: 100%;object-fit: cover;")
       el-table-column(v-else-if="head.type == 'enum'", :label="head.lbl", :width="head.width? head.width : 'auto'")
         template(slot-scope="scope")
           span {{head.enumMap[scope.row[head.prop]]}}
@@ -40,7 +38,8 @@ div
       el-table-column(v-else, :label="head.lbl", :prop="head.prop")
   .padding.text-right(v-if="!tableValue.footerHide")
     el-pagination(:current-page="currentPage", :page-size="pageSize", background, layout="prev, pager, next, jumper", :total="total", @current-change="pgCurrentChange")
-
+  el-dialog(:visible="previewShow", @close="previewShow = false", append-to-body)
+    img(:src="rowImgPath", width="100%")
 </template>
 
 <script>
@@ -82,7 +81,8 @@ export default {
       orgOptions: [],
       isVerify: true,
       searchVal: '',
-      previewShow: false
+      previewShow: false,
+      rowImgPath: ''
     }
   },
   computed: {
@@ -104,6 +104,10 @@ export default {
     })
   },
   methods: {
+    openRowImgModal(url) {
+      this.rowImgPath = url
+      this.previewShow = true
+    },
     actionBtnClick(type) {
       this.$emit('actionBtnClick', type)
     },

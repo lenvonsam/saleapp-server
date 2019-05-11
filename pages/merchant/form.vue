@@ -103,9 +103,12 @@ export default {
     ...mapActions(['configVal']),
     formReturn(obj) {
       console.log('formreturn:>>', obj)
-      console.log('logo img:>>', this.logoImg)
       this.formObj = Object.assign(this.formObj, obj)
-      if (this.formObj.setupTime && this.formObj.setupTime.length === 0) {
+      console.log('logo img:>>', this.formObj)
+      if (
+        this.formObj.setupTime != null &&
+        this.formObj.setupTime.toString().length === 0
+      ) {
         delete this.formObj.setupTime
       }
       if (this.logoImg.id && this.logoImg.id > 0) {
