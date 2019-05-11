@@ -1,6 +1,11 @@
 <template lang="pug">
 .box  
-  b-table(:tableValue="tableValue", @actionBtnClick="tableSearchBtns", @rowEdit="tableRowEdit", :rightPart="false", :total="total")
+  el-tag 普通活动
+  b-table.mt-15(:tableValue="tableValue", @actionBtnClick="tableSearchBtns", @rowEdit="tableRowEdit", :rightPart="false", :total="total")
+  el-tag.mt-15 推荐活动
+  b-table.mt-15(:tableValue="actValue", :rightPart="false", @rowEdit="tableRowEdit")
+  el-tag.mt-15 推荐商品
+  b-table.mt-15(:tableValue="prdValue", :rightPart="false", @rowEdit="tableRowEdit")
   el-dialog(:visible.sync="dialogShow")
     template(v-if="rowType == 'preview'")
       div(v-html="currentObj.strategy", v-if="currentObj.strategy && currentObj.strategy.length > 0") 123
@@ -11,7 +16,7 @@
           el-select(v-model="dropdownVal", placeholder="请输入商品名称", filterable, multiple, remote, :remote-method="remoteProducts", style="width: 80%")
             el-option(v-for="p in productArray", :key="p.id", :label="p.title", :value="p.id")
     template(v-else-if="rowType == 'products'")
-      b-table(:tableValue="activityProducts", :rightPart="false", :total="activityProducts.length")
+      b-table(:tableValue="activityProducts", :rightPart="false")
     div(slot="footer")
       el-button(@click="dialogShow = false") 取消
       el-button(type="primary", @click="dialogConfirm") 确定
@@ -23,6 +28,77 @@ import { mapState } from 'vuex'
 export default {
   layout: 'backend',
   data() {
+    const commonTHead = [
+      {
+        lbl: '活动名称',
+        prop: 'name'
+      },
+      {
+        lbl: '活动封面',
+        prop: 'coverImg',
+        type: 'image',
+        factValue(obj) {
+          return obj === null ? '' : obj.url
+        }
+      },
+      {
+        lbl: '开始时间',
+        prop: 'startTime',
+        type: 'date'
+      },
+      {
+        lbl: '结束时间',
+        prop: 'endTime',
+        type: 'date'
+      },
+      {
+        lbl: '状态',
+        type: 'object',
+        factValue(obj) {
+          if (obj.status === 0) {
+            return '待上架'
+          } else if (obj.status === 1) {
+            return '已上架'
+          } else if (obj.status === 2) {
+            return '已下架'
+          } else {
+            return '已过期'
+          }
+        }
+      },
+      {
+        lbl: '所属大类',
+        type: 'object',
+        factValue(obj) {
+          if (obj.classifies.length === 0) {
+            return '无'
+          } else {
+            return obj.classifies.map(itm => itm.name).join(',')
+          }
+        }
+      },
+      {
+        type: 'action',
+        actionBtns: [
+          {
+            lbl: '编辑',
+            type: 'edit'
+          },
+          {
+            lbl: '预览攻略',
+            type: 'preview'
+          },
+          {
+            lbl: '查看商品',
+            type: 'products'
+          },
+          {
+            lbl: '添加商品',
+            type: 'addProduct'
+          }
+        ]
+      }
+    ]
     return {
       tableValue: {
         actions: [
@@ -40,77 +116,7 @@ export default {
           }
         ],
         hasCbx: true,
-        tableHead: [
-          {
-            lbl: '活动名称',
-            prop: 'name'
-          },
-          {
-            lbl: '活动封面',
-            prop: 'coverImg',
-            type: 'image',
-            factValue(obj) {
-              return obj.url
-            }
-          },
-          {
-            lbl: '开始时间',
-            prop: 'startTime',
-            type: 'date'
-          },
-          {
-            lbl: '结束时间',
-            prop: 'endTime',
-            type: 'date'
-          },
-          {
-            lbl: '状态',
-            type: 'object',
-            factValue(obj) {
-              if (obj.status === 0) {
-                return '待上架'
-              } else if (obj.status === 1) {
-                return '已上架'
-              } else if (obj.status === 2) {
-                return '已下架'
-              } else {
-                return '已过期'
-              }
-            }
-          },
-          {
-            lbl: '所属大类',
-            type: 'object',
-            factValue(obj) {
-              if (obj.classifies.length === 0) {
-                return '无'
-              } else {
-                return obj.classifies.map(itm => itm.name).join(',')
-              }
-            }
-          },
-          {
-            type: 'action',
-            actionBtns: [
-              {
-                lbl: '编辑',
-                type: 'edit'
-              },
-              {
-                lbl: '预览攻略',
-                type: 'preview'
-              },
-              {
-                lbl: '查看商品',
-                type: 'products'
-              },
-              {
-                lbl: '添加商品',
-                type: 'addProduct'
-              }
-            ]
-          }
-        ],
+        tableHead: commonTHead,
         tableData: []
       },
       currentPage: 0,
@@ -150,6 +156,18 @@ export default {
           }
         ],
         tableData: []
+      },
+      actValue: {
+        hasCbx: false,
+        tableHead: commonTHead,
+        tableData: [],
+        footerHide: true
+      },
+      prdValue: {
+        hasCbx: false,
+        tableHead: commonTHead,
+        tableData: [],
+        footerHide: true
       }
     }
   },
@@ -160,7 +178,11 @@ export default {
     })
   },
   beforeMount() {
-    this.loadData()
+    this.$nextTick(function() {
+      this.loadData()
+      this.loadActivityDetail(1)
+      this.loadActivityDetail(2)
+    })
   },
   methods: {
     async remoteProducts(name) {
@@ -236,7 +258,7 @@ export default {
       console.log('row:>>', row)
       this.rowType = type
       if (type === 'edit') {
-        if (row.status === 1) {
+        if (row.status === 1 && row.id > 2) {
           this.msgShow(this, '活动已上架无法修改')
           return
         }
@@ -276,6 +298,21 @@ export default {
       } catch (e) {
         console.log(e)
         this.msgShow(this, e.message || '网络异常')
+      }
+    },
+    async loadActivityDetail(type = 1) {
+      try {
+        let { data } = await this.proxy(
+          this,
+          this.apiList.activityDetail + type
+        )
+        if (data.return_code === 0) {
+          type === 1
+            ? (this.actValue.tableData = [data.obj])
+            : (this.prdValue.tableData = [data.obj])
+        }
+      } catch (e) {
+        console.log(e)
       }
     }
   }

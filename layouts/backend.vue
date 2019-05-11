@@ -1,11 +1,12 @@
 <template lang="pug">
-.bk-container
-  nav-sider
-  .bk-content
-    nav-header 
-    .box-wrap
-      nuxt
-  .clearfix
+no-ssr
+  .bk-container
+    nav-sider
+    .bk-content
+      nav-header 
+      .box-wrap
+        nuxt
+    .clearfix
 
 </template>
 

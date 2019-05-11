@@ -46,7 +46,7 @@ export default {
   },
   watch: {
     value(newVal, oldVal) {
-      if (newVal) {
+      if (newVal && newVal.url) {
         this.dialogImageUrl = this.value.url
         this.picList = [
           {

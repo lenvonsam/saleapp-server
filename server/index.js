@@ -20,7 +20,6 @@ const port = process.env.PORT || 4000
 // dev url
 const bkProxyUrl = 'http://94.191.88.227:8080/saleapp-server'
 const APILIST = require('../utils/apiList').api()
-// const bkProxyUrl = 'http://47.105.170.16:8080/yeacom-server'
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
@@ -32,7 +31,8 @@ var sqlBody = {
   user: 'koas',
   password: 'koas',
   database: 'koa_session',
-  host: '94.191.88.227'
+  // host: '94.191.88.227'
+  host: '127.0.0.1'
 }
 let store = new MysqlSession(sqlBody)
 

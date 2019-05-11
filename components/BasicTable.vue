@@ -25,7 +25,7 @@ div
       el-table-column(v-else-if="head.type == 'image'", :label="head.lbl", :width="head.width? head.width: 'auto'")
         template(slot-scope="scope")
           img(:src="head.factValue(scope.row[head.prop])", @click="previewShow = true", style="max-height: 200px; width: 100%")
-          el-dialog(:visible="previewShow", @close="previewShow = false")
+          el-dialog(:visible="previewShow", @close="previewShow = false", append-to-body)
             img(:src="head.factValue(scope.row[head.prop])", width="100%")
       el-table-column(v-else-if="head.type == 'enum'", :label="head.lbl", :width="head.width? head.width : 'auto'")
         template(slot-scope="scope")

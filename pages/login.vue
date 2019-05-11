@@ -1,17 +1,18 @@
 <template lang="pug">
-el-form.login-form(:model="userForm", :rules="userRules", ref="userRuleForm")
-  el-form-item
-    h2.text-center xxxx
-  el-form-item(prop="username")
-    el-input(placeholder="请输入用户名", v-model="userForm.username")
-      i.fa.fa-user-circle-o.mr-5(slot="suffix")
-  el-form-item.mb-5(prop="pwd")
-    el-input(placeholder="请输入密码", v-model="userForm.pwd", type="password", @keyup.enter.native="loginAdmin")
-      i.fa.fa-unlock-alt(slot="suffix", style="margin-right: 8px")
-    //- .text-right
-      span.ft-12.text-gray.login-forget(style="margin-right: 2px", @click="forgetPwd") 忘记密码?
-  el-form-item.mb-10.mt-20
-    el-button(style="width: 100%; letter-spacing: 2px", type="primary", @click="loginAdmin") 登录 
+no-ssr
+  el-form.login-form(:model="userForm", :rules="userRules", ref="userRuleForm")
+    el-form-item
+      h2.text-center xxxx
+    el-form-item(prop="username")
+      el-input(placeholder="请输入用户名", v-model="userForm.username")
+        i.fa.fa-user-circle-o.mr-5(slot="suffix")
+    el-form-item.mb-5(prop="pwd")
+      el-input(placeholder="请输入密码", v-model="userForm.pwd", type="password", @keyup.enter.native="loginAdmin")
+        i.fa.fa-unlock-alt(slot="suffix", style="margin-right: 8px")
+      //- .text-right
+        span.ft-12.text-gray.login-forget(style="margin-right: 2px", @click="forgetPwd") 忘记密码?
+    el-form-item.mb-10.mt-20
+      el-button(style="width: 100%; letter-spacing: 2px", type="primary", @click="loginAdmin") 登录 
 </template>
 
 <script>

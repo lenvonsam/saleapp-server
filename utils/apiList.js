@@ -29,6 +29,8 @@ module.exports = {
       productDetail: '/backend/product/',
       productBatchStatus: '/backend/product/batchStatus',
       productDropdown: '/backend/product/dropdown',
+      productComment: '/backend/product/comment',
+      productComments: '/backend/product/$/comment',
       // 系统设置
       banners: '/backend/setting/banners',
       bannerDelete: '/backend/setting/banners/',
