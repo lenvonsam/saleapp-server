@@ -31,8 +31,8 @@ var sqlBody = {
   user: 'koas',
   password: 'koas',
   database: 'koa_session',
-  // host: '94.191.88.227'
-  host: '127.0.0.1'
+  host: '94.191.88.227'
+  // host: '127.0.0.1'
 }
 let store = new MysqlSession(sqlBody)
 
