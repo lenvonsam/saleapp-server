@@ -72,6 +72,11 @@ export default {
             type: 'input'
           },
           {
+            labelName: '商户微信号',
+            propName: 'wxNo',
+            type: 'input'
+          },
+          {
             labelName: '商户简介',
             propName: 'intro',
             type: 'textarea'
