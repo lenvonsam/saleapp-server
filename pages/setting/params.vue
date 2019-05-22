@@ -8,19 +8,37 @@
       template(v-if="switchToggle")
         el-form-item(label="平台分佣")
         el-slider(v-model="localObj.platformRatio")
-        el-form-item(label="客户分销分佣")
-        el-slider(v-model="localObj.saleRatio")
+        //- el-form-item(label="客户分销分佣")
+        //- el-slider(v-model="localObj.saleRatio")
       template(v-else)
         el-form-item(label="平台分佣")
           el-input(type="number", placeholder="请输入分佣金额", v-model="localObj.platformRatio")
             span(slot="append") 元
-        el-form-item(label="客户分销分佣")
+        //- el-form-item(label="客户分销分佣")
           el-input(type="number", placeholder="请输入分佣金额", v-model="localObj.saleRatio")
             span(slot="append") 元
+    el-tag.mt-15 红包设置
+    el-row.mt-15
+      el-col(:span="5")
+        label 1-5元
+        .mt-10
+          el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp1")
+      el-col(:span="5")
+        label 5-10元
+        .mt-10
+          el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp2")
+      el-col(:span="5")
+        label 10-15元
+        .mt-10
+          el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp3")
+      el-col(:span="5")
+        label 15-20元
+        .mt-10
+          el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp4")
     el-tag.mt-15 返现设置
     el-form.mt-15.w-66
       el-form-item(label="返现天数")
-        el-input(type="number", :step="1", placeholder="必须大于当天", v-model="localObj.backToMerchantTime")
+        el-input(type="number", :step="1", placeholder="必须大于当天", v-model="localObj.backToMerchantTime", style="max-width: 300px")
           span(slot="prepend") T +
           span(slot="append") 天
     el-button.mt-15(@click="updateSys", type="primary") 保存
@@ -36,7 +54,11 @@ export default {
   data() {
     return {
       localObj: {},
-      switchToggle: false
+      switchToggle: false,
+      rp1: 1,
+      rp2: 1,
+      rp3: 1,
+      rp4: 1
     }
   },
   computed: {
@@ -59,6 +81,19 @@ export default {
         })
         if (data.return_code === 0) {
           this.localObj = data.obj
+          this.rp1 = this.localObj.rpa1 || 1
+          this.rp2 = this.localObj.rpa2 || 1
+          this.rp3 = this.localObj.rpa3 || 1
+          this.rp4 = this.localObj.rpa4 || 1
+          console.log(
+            this.rp1,
+            '; r2:>.',
+            this.rp2,
+            '; r3:>>',
+            this.rp3,
+            '; r4:>>',
+            this.rp4
+          )
           this.switchToggle = this.localObj.commissionType === 1
         } else {
           this.msgShow(this, data.message)
@@ -79,7 +114,11 @@ export default {
           this.msgShow(this, '返现天数不能小于当天')
           return
         }
-        this.localObj.bucket = this.localObj.bucket.id
+        this.localObj.bucket = this.localObj.bucket.id || this.localObj.bucket
+        this.localObj.rpa1 = this.rp1
+        this.localObj.rpa2 = this.rp2
+        this.localObj.rpa3 = this.rp3
+        this.localObj.rpa4 = this.rp4
         delete this.localObj.updateAt
         delete this.localObj.createAt
         if (this.switchToggle) this.localObj.commissionType = 1

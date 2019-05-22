@@ -184,6 +184,7 @@ export default {
       if (this.$route.query.type === 'edit') {
         delete this.formObj.updateAt
         delete this.formObj.createAt
+        delete this.formObj.activities
       }
       delete this.formObj.banners
       this.formObj.merchant = this.merchantId
