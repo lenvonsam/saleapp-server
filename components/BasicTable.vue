@@ -24,7 +24,7 @@ div
           span {{head.factValue(scope.row)}}
       el-table-column(v-else-if="head.type == 'image'", :label="head.lbl", :width="head.width? head.width: 'auto'")
         template(slot-scope="scope")
-          img(:src="head.factValue(scope.row[head.prop])", @click="openRowImgModal(head.factValue(scope.row[head.prop]))", style="height: 100%; width: 100%;object-fit: cover;")
+          img(:src="head.factValue(scope.row[head.prop])", @click="openRowImgModal(head.factValue(scope.row[head.prop]))", style="height: 100%; width: 100%;object-fit: cover; max-height: 80px;")
       el-table-column(v-else-if="head.type == 'enum'", :label="head.lbl", :width="head.width? head.width : 'auto'")
         template(slot-scope="scope")
           span {{head.enumMap[scope.row[head.prop]]}}

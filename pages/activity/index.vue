@@ -278,6 +278,7 @@ export default {
     },
     async loadData() {
       try {
+        this.pageShow(this)
         let body = {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
@@ -289,6 +290,7 @@ export default {
           'get',
           body
         )
+        this.pageHide(this)
         if (data.return_code === 0) {
           this.tableValue.tableData = data.list
           this.total = data.total
@@ -297,6 +299,7 @@ export default {
         }
       } catch (e) {
         console.log(e)
+        this.pageHide(this)
         this.msgShow(this, e.message || '网络异常')
       }
     },

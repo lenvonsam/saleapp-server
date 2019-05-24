@@ -256,11 +256,13 @@ export default {
     },
     async loadData() {
       try {
+        this.pageShow(this)
         let body = {
           currentPage: this.currentPage,
           pageSize: this.pageSize
         }
         let { data } = await this.proxy(this, this.apiList.product, 'get', body)
+        this.pageHide(this)
         if (data.list.length > 0) {
           this.tableValue.tableData = data.list
           this.total = data.total
@@ -268,6 +270,7 @@ export default {
           if (data.return_code != 0) this.msgShow(this, data.message)
         }
       } catch (e) {
+        this.pageHide(this)
         console.log(e)
         this.msgShow(this, e.message || '网络异常')
       }

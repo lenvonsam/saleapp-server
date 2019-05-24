@@ -1,6 +1,5 @@
 <template lang="pug">
-  div
-    h1 333
+.box
 </template>
 
 <script>
