@@ -1,7 +1,7 @@
 <template lang="pug">
 .box  
   el-tag 普通活动
-  b-table.mt-15(:tableValue="tableValue", @actionBtnClick="tableSearchBtns", @rowEdit="tableRowEdit", :rightPart="false", :total="total")
+  b-table.mt-15(:tableValue="tableValue", @actionBtnClick="tableSearchBtns", @rowEdit="tableRowEdit", :rightPart="false", :total="total", @chooseData="rowSelection")
   el-tag.mt-15 推荐活动
   b-table.mt-15(:tableValue="actValue", :rightPart="false", @rowEdit="tableRowEdit")
   el-tag.mt-15 推荐商品
@@ -121,6 +121,7 @@ export default {
       },
       currentPage: 0,
       total: 0,
+      chooseArr: [],
       dialogShow: false,
       rowType: '',
       currentObj: '',
@@ -185,6 +186,9 @@ export default {
     })
   },
   methods: {
+    rowSelection(val) {
+      this.chooseArr = val
+    },
     async remoteProducts(name) {
       try {
         let { data } = await this.proxy(
@@ -274,6 +278,41 @@ export default {
     tableSearchBtns(type) {
       if (type === 'create') {
         this.jump({ path: '/activity/form?type=new' })
+      }
+      if (type === 'batchUp' || type === 'batchDown') {
+        console.log(type)
+        if (this.chooseArr.length === 0) {
+          this.msgShow(this, '请选择操作行')
+          return
+        }
+        this.batchStatus(type === 'batchUp' ? 1 : 2)
+      }
+    },
+    async batchStatus(status) {
+      try {
+        this.pageShow(this)
+        let ids = this.chooseArr.map(itm => itm.id).join(',')
+        let { data } = await this.proxy(
+          this,
+          this.apiList.activityBatchStatus,
+          'put',
+          {
+            status: status,
+            ids: ids
+          }
+        )
+        this.pageHide(this)
+        if (data.return_code === 0) {
+          this.currentPage = 0
+          this.loadData()
+          this.msgShow(this, '操作成功', 'success')
+        } else {
+          this.msgShow(this, data.message)
+        }
+      } catch (e) {
+        console.log(e)
+        this.pageHide(this)
+        this.msgShow(this, e.message || '网络异常')
       }
     },
     async loadData() {

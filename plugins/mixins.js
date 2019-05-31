@@ -126,7 +126,32 @@ const minixs = {
     pageShow: elementUtil.pageShow,
     pageHide: elementUtil.pageHide,
     msgShow: elementUtil.msgShow,
-    confirmDialog: elementUtil.confirmDialog
+    confirmDialog: elementUtil.confirmDialog,
+    // excel 数据导出
+    excelExport(thead, tdata, tname = 'excel_template') {
+      require.ensure([], () => {
+        const {
+          export_json_to_excel
+        } = require('../utils/excelExport/Export2Excel')
+        export_json_to_excel(thead, tdata, tname)
+      })
+    },
+    excelDataFormat(keys, values, timekeys = []) {
+      return values.map(v =>
+        keys.map(k => {
+          if (timekeys.length === 0) {
+            return v[k]
+          } else {
+            let idx = timekeys.findIndex(t => t === k)
+            if (idx >= 0) {
+              return this.date2Time(v[k])
+            } else {
+              return v[k]
+            }
+          }
+        })
+      )
+    }
   }
 }
 Vue.mixin(minixs)

@@ -1,41 +1,41 @@
 <template lang="pug">
 .box
   i-box
-    el-tag 佣金设置
-    el-form.mt-15.w-66
-      el-form-item
-        el-switch(active-text="按比例", inactive-text="按固定金额", v-model="switchToggle", @change="switchChange")
-      template(v-if="switchToggle")
-        el-form-item(label="平台分佣")
-        el-slider(v-model="localObj.platformRatio")
-        //- el-form-item(label="客户分销分佣")
-        //- el-slider(v-model="localObj.saleRatio")
-      template(v-else)
-        el-form-item(label="平台分佣")
-          el-input(type="number", placeholder="请输入分佣金额", v-model="localObj.platformRatio")
-            span(slot="append") 元
+    //- el-tag 佣金设置
+    //- el-form.mt-15.w-66
+      //- el-form-item
+      //-   el-switch(active-text="按比例", inactive-text="按固定金额", v-model="switchToggle", @change="switchChange")
+      //- template(v-if="switchToggle")
+      //-   el-form-item(label="平台分佣")
+      //-   el-slider(v-model="localObj.platformRatio")
+      //-   //- el-form-item(label="客户分销分佣")
+      //-   //- el-slider(v-model="localObj.saleRatio")
+      //- template(v-else)
+      //-   el-form-item(label="平台分佣")
+      //-     el-input(type="number", placeholder="请输入分佣金额", v-model="localObj.platformRatio")
+      //-       span(slot="append") 元
         //- el-form-item(label="客户分销分佣")
           el-input(type="number", placeholder="请输入分佣金额", v-model="localObj.saleRatio")
             span(slot="append") 元
-    el-tag.mt-15 红包设置
-    el-row.mt-15
-      el-col(:span="5")
-        label 1-5元
-        .mt-10
-          el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp1")
-      el-col(:span="5")
-        label 5-10元
-        .mt-10
-          el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp2")
-      el-col(:span="5")
-        label 10-15元
-        .mt-10
-          el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp3")
-      el-col(:span="5")
-        label 15-20元
-        .mt-10
-          el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp4")
-    el-tag.mt-15 返现设置
+    //- el-tag.mt-15 红包设置
+    //- el-row.mt-15
+    //-   el-col(:span="5")
+    //-     label 1-5元
+    //-     .mt-10
+    //-       el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp1")
+    //-   el-col(:span="5")
+    //-     label 5-10元
+    //-     .mt-10
+    //-       el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp2")
+    //-   el-col(:span="5")
+    //-     label 10-15元
+    //-     .mt-10
+    //-       el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp3")
+    //-   el-col(:span="5")
+    //-     label 15-20元
+    //-     .mt-10
+    //-       el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp4")
+    el-tag 返现设置
     el-form.mt-15.w-66
       el-form-item(label="返现天数")
         el-input(type="number", :step="1", placeholder="必须大于当天", v-model="localObj.backToMerchantTime", style="max-width: 300px")

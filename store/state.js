@@ -29,6 +29,10 @@ export default () => ({
         {
           title: '活动大类',
           url: '/classify'
+        },
+        {
+          title: '创建活动',
+          url: '/activity/createForm'
         }
       ]
     },

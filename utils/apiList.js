@@ -25,6 +25,10 @@ module.exports = {
       activityDetail: '/backend/activity/',
       activityAddProduct: '/backend/activity/addProducts',
       acitvityProducts: '/backend/activity/$/products',
+      activityDropdown: '/backend/activity/dropdown',
+      activityBatchStatus: '/backend/activity/batchStatus',
+      activityForm: '/backend/activity/form',
+      activityFormExcel: '/backend/activity/formExcel',
       // 商户
       merchant: '/backend/account/merchant',
       merchantDetail: '/backend/account/merchant/',
@@ -37,7 +41,7 @@ module.exports = {
       productComments: '/backend/product/$/comment',
       // 系统设置
       banners: '/backend/setting/banners',
-      bannerDelete: '/backend/setting/banners/',
+      // bannerDelete: '/backend/setting/banners/',
       sysConfig: '/backend/setting/sysConfig'
     }
   }

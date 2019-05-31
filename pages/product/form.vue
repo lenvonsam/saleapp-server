@@ -3,20 +3,27 @@
   i-box
     b-form(:basicformConfig="formConfig", :modelForm="formObj", @formSubmit="formReturn")
       template(slot="append")
-        el-form-item(label="商品详情")
+        el-form-item(label="商品详情", required)
           el-col(:span="13")
             q-editor(v-model="productRichContent")
           el-col.pl-15(:span="11")
             .preview-toolbar 实时预览
             .preview-container
               .preview-content(v-html="productRichContent")
-        el-form-item(label="商品封面")
+        el-form-item(label="商品封面", required)
           single-pic-upload(v-model="logoImg", :extra="fileExt")
-        el-form-item(label="分享背景图")
+        el-form-item(label="分享背景图", required)
           single-pic-upload(v-model="shareImg", :extra="fileExt")
-        el-form-item(label="商品轮播图")
+        el-form-item(label="商品轮播图", required)
           multi-pic-upload(v-model="bannerImg", :extra="fileExt")
-        el-form-item(label="所属商户", v-if="currentUser.acctLevel == 2 || currentUser.acctLevel == 3")
+        el-form-item(label="平台佣金", required)
+          el-input-number(v-model="platformRatio")
+        el-form-item(label="分销区间", required)
+          el-col(:span="5")
+            el-input-number(placeholder="最低金额", v-model="minSale")
+          el-col(:span="5")
+            el-input-number(placeholder="最高金额", v-model="maxSale")
+        el-form-item(label="所属商户", v-if="currentUser.acctLevel == 2 || currentUser.acctLevel == 3", required)
           el-autocomplete(v-model="merchantName", :fetch-suggestions="merchantRemoteSearch", placeholder="请输入商户名称", @select="merchantSelect")
             template(slot-scope="{item}")
               div {{item.name}}
@@ -46,6 +53,9 @@ export default {
       shareImg: {},
       // banner图片
       bannerImg: [],
+      platformRatio: 1,
+      maxSale: 1,
+      minSale: 0.1,
       formObj: {},
       formConfig: {
         rules: {
@@ -160,6 +170,26 @@ export default {
         this.msgShow(this, '商品封面不能为空')
         return
       }
+      if (this.shareImg.id === undefined) {
+        this.msgShow(this, '商品分享图不能为空')
+        return
+      }
+      if (this.platformRatio <= 0) {
+        this.msgShow(this, '必须大于0')
+        return
+      }
+      if (this.minSale <= 0) {
+        this.msgShow(this, '必须大于0')
+        return
+      }
+      if (this.maxSale <= 0) {
+        this.msgShow(this, '必须大于0')
+        return
+      }
+      if (this.maxSale < this.minSale) {
+        this.msgShow(this, '最低金额不能大于最高金额')
+        return
+      }
       if (this.merchantId === -1) {
         this.msgShow(this, '请选择所属商户')
         return
@@ -188,6 +218,9 @@ export default {
       }
       delete this.formObj.banners
       this.formObj.merchant = this.merchantId
+      this.formObj.platformRatio = this.platformRatio
+      this.formObj.minSale = this.minSale
+      this.formObj.maxSale = this.maxSale
       this.saveOrUpdate()
     },
     async productDetail() {

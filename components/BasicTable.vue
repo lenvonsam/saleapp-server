@@ -35,6 +35,9 @@ div
       el-table-column(v-else-if="head.type == 'date'", :label="head.lbl", :prop="head.prop")
         template(slot-scope="scope")
           span {{date2Str(scope.row[head.prop])}}
+      el-table-column(v-else-if="head.type == 'datetime'", :label="head.lbl", :prop="head.prop")
+        template(slot-scope="scope")
+          span {{date2Time(scope.row[head.prop])}}
       el-table-column(v-else, :label="head.lbl", :prop="head.prop")
   .padding.text-right(v-if="!tableValue.footerHide")
     el-pagination(:current-page="currentPage", :page-size="pageSize", background, layout="prev, pager, next, jumper", :total="total", @current-change="pgCurrentChange")

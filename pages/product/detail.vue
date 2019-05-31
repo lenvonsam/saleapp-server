@@ -14,12 +14,12 @@
       el-row.mt-15
         el-col(:span="12")
           .padding.text-center
-            img(:src="formObj.coverImages.url")
+            img.full-width(:src="formObj.coverImages.url")
           .text-center.mt-5 商品封面
         el-col(:span="12")
           template(v-if="formObj.shareImg")
             .padding.text-center
-              img(:src="formObj.shareImg.url")
+              img.full-width(:src="formObj.shareImg.url")
             .text-center.mt-5 商品分享图
           .text-center(v-else) 暂无
     el-tag.mt-15 商品轮播图
@@ -75,6 +75,19 @@ export default {
           {
             lbl: '创建时间',
             key: 'createAt'
+          }
+        ],
+        [
+          {
+            lbl: '平台佣金',
+            key: 'platformRatio'
+          },
+          {
+            lbl: '分销区间',
+            type: 'self',
+            factValue(self) {
+              return self.minSale + '~' + self.maxSale
+            }
           }
         ]
       ]
