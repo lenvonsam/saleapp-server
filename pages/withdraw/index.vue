@@ -94,10 +94,10 @@ export default {
                 lbl: '微信零钱包',
                 type: 'wx'
               },
-              {
-                lbl: '银行转账',
-                type: 'bankOnline'
-              },
+              // {
+              //   lbl: '银行转账',
+              //   type: 'bankOnline'
+              // },
               {
                 lbl: '线下打款',
                 type: 'bankOffline'
@@ -159,14 +159,14 @@ export default {
             lbl: '操作',
             type: 'action',
             actionBtns: [
-              {
-                lbl: '微信零钱包',
-                type: 'wx'
-              },
-              {
-                lbl: '线上转账',
-                type: 'bankOnline'
-              },
+              // {
+              //   lbl: '微信零钱包',
+              //   type: 'wx'
+              // },
+              // {
+              //   lbl: '线上转账',
+              //   type: 'bankOnline'
+              // },
               {
                 lbl: '线下打款',
                 type: 'bankOffline'
@@ -347,15 +347,47 @@ export default {
       console.log('type :>>', type)
       // this.formObj = Object.assign({}, obj)
       // this.dialogVisible = true
-      if (type === 'wx' || type === 'bankOnline') {
+      const me = this
+      if (type === 'bankOnline') {
         this.msgShow(this, '正在努力开发中...', 'warning')
+      } else if (type === 'wx') {
+        this.confirmDialog(this, '请确认要给该账户微信零钱包，一旦确认无法更改')
+          .then(() => {
+            console.log('confirm')
+            me.callWxTrans(obj)
+          })
+          .catch(() => {})
       } else if (type === 'bankOffline') {
-        const me = this
         this.confirmDialog(this, '请仔细核对相关信息，一点确认将无法更改')
           .then(() => {
             me.changeTransType(obj.id, 4)
           })
           .catch(() => {})
+      }
+    },
+    // 微信零钱
+    async callWxTrans(obj) {
+      try {
+        this.pageShow(this)
+        let url = this.apiList.accountWithdrawTrans.replace('$', obj.acct.id)
+        let { data } = await this.proxy(this, url, 'put', {
+          bid: this.currentUser.currentBucket.id,
+          recordId: obj.id
+        })
+        this.pageHide(this)
+        if (data.return_code === 0) {
+          this.msgShow(this, '微信零钱转账成功', 'success')
+          this.userCurrentPage = 0
+          this.loadUserData()
+          this.userdCurrentPage = 0
+          this.loadUserStatusData()
+        } else {
+          this.msgShow(this, data.message)
+        }
+      } catch (e) {
+        console.error(e)
+        this.pageHide(this)
+        this.msgShow(this, e.message || '网络异常')
       }
     },
     async changeTransType(id, type) {
@@ -370,7 +402,7 @@ export default {
           if (this.activeName === 'user') {
             this.userCurrentPage = 0
             this.loadUserData()
-            this.userCurrentPage = 0
+            this.userdCurrentPage = 0
             this.loadUserStatusData()
           } else {
             this.merchantCurrentPage = 0

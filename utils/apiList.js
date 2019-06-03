@@ -8,6 +8,7 @@ module.exports = {
       accountUsers: '/backend/account/users',
       accountWithdraw: '/backend/account/withdraw',
       accountWithdrawStatus: '/backend/account/withdrawStatus',
+      accountWithdrawTrans: '/backend/account/$/withdraw',
       accountTrans: '/backend/account/$/trans',
       menus: '/backend/menu',
       parentMenus: '/backend/menu/parentMenus',
