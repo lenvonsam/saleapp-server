@@ -106,15 +106,15 @@ export default {
               {
                 lbl: '详情',
                 type: 'info'
-              },
-              {
-                lbl: '添加评论',
-                type: 'addComment'
-              },
-              {
-                lbl: '评论列表',
-                type: 'comments'
               }
+              // {
+              //   lbl: '添加评论',
+              //   type: 'addComment'
+              // },
+              // {
+              //   lbl: '评论列表',
+              //   type: 'comments'
+              // }
             ]
           }
         ],

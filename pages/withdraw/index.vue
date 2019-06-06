@@ -5,13 +5,13 @@
       el-tab-pane(label="用户提现", name="user")
         .padding
           el-tag 待处理
-          b-table.mt-15(:tableValue="userTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="userTotal")
+          b-table.mt-15(:tableValue="userTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="userTotal", @actionBtnClick="topBtnHandler")
           el-tag.mt-15 已处理
           b-table.mt-15(:tableValue="userdTableValue", :rightPart="false",  :total="userdTotal")
       el-tab-pane(label="商户提现", name="merchant")
         .padding
           el-tag 待处理
-          b-table.mt-15(:tableValue="merchantTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="merchantTotal")
+          b-table.mt-15(:tableValue="merchantTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="merchantTotal", @actionBtnClick="topBtnHandler")
           el-tag.mt-15 已处理
           b-table.mt-15(:tableValue="merchantdTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="merchantdTotal")
 
@@ -29,6 +29,12 @@ export default {
       userCurrentPage: 0,
       userTableValue: {
         hasCbx: true,
+        actions: [
+          {
+            lbl: '数据导出',
+            type: 'excel'
+          }
+        ],
         tableHead: [
           {
             lbl: '用户昵称',
@@ -109,6 +115,12 @@ export default {
       },
       merchantTableValue: {
         hasCbx: true,
+        actions: [
+          {
+            lbl: '数据导出',
+            type: 'excel'
+          }
+        ],
         tableHead: [
           {
             lbl: '商户名称',
@@ -343,6 +355,83 @@ export default {
     }
   },
   methods: {
+    topBtnHandler(type) {
+      if (type === 'excel') {
+        let theader = []
+        let thkeys = []
+        if (this.activeName === 'user') {
+          theader = [
+            '用户昵称',
+            '真实姓名',
+            '手机号',
+            '账户余额',
+            '提现金额',
+            '打款类型',
+            '开户行',
+            '开户名称',
+            '银行卡号'
+          ]
+          thkeys = [
+            'unickname',
+            'urealName',
+            'uphone',
+            'ubalance',
+            'amount',
+            'withdrawType',
+            'bankName',
+            'bankAcct',
+            'bankNo'
+          ]
+        } else {
+          theader = [
+            '商户名称',
+            '商户地址',
+            '商户余额',
+            '提现金额',
+            '打款方式',
+            '开户行',
+            '开户名称',
+            '银行卡号'
+          ]
+          thkeys = [
+            'mname',
+            'maddr',
+            'ubalance',
+            'amount',
+            'withdrawType',
+            'bankName',
+            'bankAcct',
+            'bankNo'
+          ]
+        }
+        this.pageShow(this)
+        this.callAcctWithdrawList(theader, thkeys)
+      }
+    },
+    async callAcctWithdrawList(theader, thkeys) {
+      try {
+        let { data } = await this.proxy(
+          this,
+          this.apiList.accountWithdrawExcel,
+          'get',
+          {
+            bid: this.currentUser.currentBucket.id,
+            type: this.activeName === 'user' ? 0 : 1
+          }
+        )
+        this.pageHide(this)
+        if (data.return_code === 0) {
+          const edata = this.excelDataFormat(thkeys, data.list, [])
+          this.excelExport(theader, edata)
+        } else {
+          this.msgShow(this, data.message)
+        }
+      } catch (e) {
+        console.log(e)
+        this.pageHide(this)
+        this.msgShow(this, e.message || '获取导出数据失败')
+      }
+    },
     tableRowEdit(idx, obj, type) {
       console.log('type :>>', type)
       // this.formObj = Object.assign({}, obj)

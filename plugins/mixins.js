@@ -8,6 +8,39 @@ function formatNumber(n) {
   return n[1] ? n : '0' + n
 }
 
+function keyFilter(key, value) {
+  switch (key) {
+    case 'unickname':
+      return value.acct.nickname || ''
+    case 'urealName':
+      return value.acct.realName || ''
+    case 'uphone':
+      return value.acct.phone || ''
+    case 'ubalance':
+      return value.acct.balance || '0'
+    case 'withdrawType':
+      return value.withdrawType === 0 ? '微信钱包' : '银行卡'
+    case 'mname':
+      return value.merchant.name || ''
+    case 'maddr':
+      return value.merchant.addr || ''
+    case 'billStatus':
+      if (value.status === 0) {
+        return '待支付'
+      } else if (value.status === 1) {
+        return '待核销'
+      } else {
+        return '已完成'
+      }
+    case 'billMerchant':
+      return value.product.merchant.name
+    case 'canGiven':
+      return value.canGiven ? '是' : '否'
+    default:
+      return value[key] || ''
+  }
+}
+
 const minixs = {
   data() {
     return {
@@ -140,13 +173,13 @@ const minixs = {
       return values.map(v =>
         keys.map(k => {
           if (timekeys.length === 0) {
-            return v[k]
+            return keyFilter(k, v)
           } else {
             let idx = timekeys.findIndex(t => t === k)
             if (idx >= 0) {
               return this.date2Time(v[k])
             } else {
-              return v[k]
+              return keyFilter(k, v)
             }
           }
         })

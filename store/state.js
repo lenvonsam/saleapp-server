@@ -55,6 +55,11 @@ export default () => ({
       ]
     },
     {
+      title: '订单管理',
+      iconClass: 'fa fa-map-o',
+      subItems: [{ title: '用户订单', url: '/bill' }]
+    },
+    {
       title: '系统设置',
       iconClass: 'el-icon-setting',
       subItems: [

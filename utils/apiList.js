@@ -9,6 +9,7 @@ module.exports = {
       accountWithdraw: '/backend/account/withdraw',
       accountWithdrawStatus: '/backend/account/withdrawStatus',
       accountWithdrawTrans: '/backend/account/$/withdraw',
+      accountWithdrawExcel: '/backend/account/withdrawExcel',
       accountTrans: '/backend/account/$/trans',
       menus: '/backend/menu',
       parentMenus: '/backend/menu/parentMenus',
@@ -43,7 +44,10 @@ module.exports = {
       // 系统设置
       banners: '/backend/setting/banners',
       // bannerDelete: '/backend/setting/banners/',
-      sysConfig: '/backend/setting/sysConfig'
+      sysConfig: '/backend/setting/sysConfig',
+      // 订单
+      bill: '/backend/bill',
+      billExcel: '/backend/bill/excel'
     }
   }
 }
