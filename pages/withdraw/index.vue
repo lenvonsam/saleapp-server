@@ -3,14 +3,18 @@
   .bg-white
     el-tabs(v-model="activeName" type="card")
       el-tab-pane(label="用户提现", name="user")
-        .padding
-          el-tag 待处理
+        .padding.pt-0
+          div
+            el-button(size="small", @click="topBtnHandler('excel')") 全部导出
+          el-tag.mt-15 待处理
           b-table.mt-15(:tableValue="userTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="userTotal", @actionBtnClick="topBtnHandler")
           el-tag.mt-15 已处理
           b-table.mt-15(:tableValue="userdTableValue", :rightPart="false",  :total="userdTotal")
       el-tab-pane(label="商户提现", name="merchant")
-        .padding
-          el-tag 待处理
+        .padding.pt-0
+          div
+            el-button(size="small", @click="topBtnHandler('excel')") 全部导出
+          el-tag.mt-15 待处理
           b-table.mt-15(:tableValue="merchantTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="merchantTotal", @actionBtnClick="topBtnHandler")
           el-tag.mt-15 已处理
           b-table.mt-15(:tableValue="merchantdTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="merchantdTotal")
@@ -29,12 +33,12 @@ export default {
       userCurrentPage: 0,
       userTableValue: {
         hasCbx: true,
-        actions: [
-          {
-            lbl: '数据导出',
-            type: 'excel'
-          }
-        ],
+        // actions: [
+        //   {
+        //     lbl: '数据导出',
+        //     type: 'excel'
+        //   }
+        // ],
         tableHead: [
           {
             lbl: '用户昵称',
@@ -115,12 +119,12 @@ export default {
       },
       merchantTableValue: {
         hasCbx: true,
-        actions: [
-          {
-            lbl: '数据导出',
-            type: 'excel'
-          }
-        ],
+        // actions: [
+        //   {
+        //     lbl: '数据导出',
+        //     type: 'excel'
+        //   }
+        // ],
         tableHead: [
           {
             lbl: '商户名称',
@@ -369,7 +373,8 @@ export default {
             '打款类型',
             '开户行',
             '开户名称',
-            '银行卡号'
+            '银行卡号',
+            '提现状态'
           ]
           thkeys = [
             'unickname',
@@ -380,7 +385,8 @@ export default {
             'withdrawType',
             'bankName',
             'bankAcct',
-            'bankNo'
+            'bankNo',
+            'withdrawStatus'
           ]
         } else {
           theader = [
@@ -391,7 +397,8 @@ export default {
             '打款方式',
             '开户行',
             '开户名称',
-            '银行卡号'
+            '银行卡号',
+            '提现状态'
           ]
           thkeys = [
             'mname',
@@ -401,7 +408,8 @@ export default {
             'withdrawType',
             'bankName',
             'bankAcct',
-            'bankNo'
+            'bankNo',
+            'withdrawStatus'
           ]
         }
         this.pageShow(this)

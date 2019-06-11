@@ -36,6 +36,12 @@ function keyFilter(key, value) {
       return value.product.merchant.name
     case 'canGiven':
       return value.canGiven ? '是' : '否'
+    case 'withdrawStatus':
+      if (value.status === 0) {
+        return '待处理'
+      } else {
+        return '已处理'
+      }
     default:
       return value[key] || ''
   }
