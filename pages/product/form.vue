@@ -27,6 +27,18 @@
           el-autocomplete(v-model="merchantName", :fetch-suggestions="merchantRemoteSearch", placeholder="请输入商户名称", @select="merchantSelect")
             template(slot-scope="{item}")
               div {{item.name}}
+        //- el-form-item(label="商品类型", required)
+          el-select(v-model="pType")
+            el-option(label="引流", value="1")
+            el-option(label="普通(非物流)", value="2")
+            el-option(label="普通(物流)", value="3")
+        //- el-form-item(label="购买须知", required, v-if="pType !== '1'")
+          el-col(:span="13")
+            q-editor(v-model="productNoticeContent")
+          el-col.pl-15(:span="11")
+            .preview-toolbar 实时预览
+            .preview-container
+              .preview-content(v-html="productNoticeContent")
   </template>
 </template>
 <script>
@@ -106,7 +118,9 @@ export default {
       merchantStatus: '1',
       productRichContent: '',
       merchantName: '',
-      merchantId: -1
+      merchantId: -1,
+      pType: '1',
+      productNoticeContent: ''
     }
   },
   computed: {
@@ -211,6 +225,13 @@ export default {
       } else {
         delete this.formObj.shareImg
       }
+      if (
+        this.pType !== '1' &&
+        this.productNoticeContent.toString().trim().length === 0
+      ) {
+        this.msgShow(this, '购买须知不能为空')
+        return
+      }
       if (this.$route.query.type === 'edit') {
         delete this.formObj.updateAt
         delete this.formObj.createAt
@@ -221,6 +242,12 @@ export default {
       this.formObj.platformRatio = this.platformRatio
       this.formObj.minSale = this.minSale
       this.formObj.maxSale = this.maxSale
+      this.formObj.type = Number(this.pType)
+      if (this.formObj.type > 1) {
+        this.formObj.noticeInfo = this.productNoticeContent
+      } else {
+        delete this.formObj.noticeInfo
+      }
       this.saveOrUpdate()
     },
     async productDetail() {
@@ -242,6 +269,9 @@ export default {
           if (this.formObj.intro) this.productRichContent = this.formObj.intro
           this.maxSale = this.formObj.maxSale
           this.minSale = this.formObj.minSale
+          this.pType = this.formObj.type + ''
+          if (this.formObj.type > 1)
+            this.productNoticeContent = this.formObj.noticeInfo
         } else {
           this.msgShow(this, data.message)
         }

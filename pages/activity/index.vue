@@ -8,7 +8,7 @@
   b-table.mt-15(:tableValue="prdValue", :rightPart="false", @rowEdit="tableRowEdit")
   el-dialog(:visible.sync="dialogShow")
     template(v-if="rowType == 'preview'")
-      .modal-preview(v-html="currentObj.strategy", v-if="currentObj.strategy && currentObj.strategy.length > 0") 123
+      .modal-preview(v-html="currentObj.strategy", v-if="currentObj.strategy && currentObj.strategy.length > 0")
       .padding.text-center(v-else) 暂无攻略
     template(v-else-if="rowType == 'addProduct'")
       el-form
@@ -16,7 +16,7 @@
           el-select(v-model="dropdownVal", placeholder="请输入商品名称", filterable, multiple, remote, :remote-method="remoteProducts", style="width: 80%")
             el-option(v-for="p in productArray", :key="p.id", :label="p.title", :value="p.id")
     template(v-else-if="rowType == 'products'")
-      b-table(:tableValue="activityProducts", :rightPart="false")
+      b-table(:tableValue="activityProducts", :rightPart="false", @rowEdit="activityProductRowEdit")
     div(slot="footer")
       el-button(@click="dialogShow = false") 取消
       el-button(type="primary", @click="dialogConfirm") 确定
@@ -154,6 +154,16 @@ export default {
           {
             lbl: '折扣价',
             prop: 'discountPrice'
+          },
+          {
+            lbl: '操作',
+            type: 'action',
+            actionBtns: [
+              {
+                lbl: '移出活动',
+                type: 'delete'
+              }
+            ]
           }
         ],
         tableData: []
@@ -188,6 +198,31 @@ export default {
   methods: {
     rowSelection(val) {
       this.chooseArr = val
+    },
+    activityProductRowEdit(idx, row, type) {
+      if (type === 'delete') {
+        this.deleteActivityOneProduct(row.id)
+      }
+    },
+    async deleteActivityOneProduct(pid) {
+      try {
+        this.pageShow(this)
+        const url = this.apiList.activityProductDel.replace(
+          '$',
+          this.currentObj.id
+        )
+        let { data } = await this.proxy(this, url, 'delete', { pid: pid })
+        this.pageHide(this)
+        if (data.return_code === 0) {
+          this.msgShow(this, '移除成功', 'success')
+          this.callActivityProducts(this.currentObj.id)
+        } else {
+          this.msgShow(this, data.message)
+        }
+      } catch (e) {
+        this.pageHide(this)
+        this.msgShow(this, e.message || '网络异常')
+      }
     },
     async remoteProducts(name) {
       try {

@@ -16,9 +16,9 @@ const app = new Koa()
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 4000
 // local url
-// const bkProxyUrl = 'http://localhost:8666'
+const bkProxyUrl = 'http://localhost:8666'
 // dev url
-const bkProxyUrl = 'http://94.191.88.227:8080/saleapp-server'
+// const bkProxyUrl = 'http://94.191.88.227:8080/saleapp-server'
 const APILIST = require('../utils/apiList').api()
 
 // Import and Set Nuxt.js options
@@ -31,8 +31,8 @@ var sqlBody = {
   user: 'koas',
   password: 'koas',
   database: 'koa_session',
-  host: '94.191.88.227'
-  // host: '127.0.0.1'
+  // host: '94.191.88.227'
+  host: '127.0.0.1'
 }
 let store = new MysqlSession(sqlBody)
 

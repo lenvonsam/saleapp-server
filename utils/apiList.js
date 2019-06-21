@@ -31,6 +31,7 @@ module.exports = {
       activityBatchStatus: '/backend/activity/batchStatus',
       activityForm: '/backend/activity/form',
       activityFormExcel: '/backend/activity/formExcel',
+      activityProductDel: '/backend/activity/$/product',
       // 商户
       merchant: '/backend/account/merchant',
       merchantDetail: '/backend/account/merchant/',

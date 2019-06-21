@@ -35,7 +35,12 @@
     //-     label 15-20元
     //-     .mt-10
     //-       el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp4")
-    el-tag 返现设置
+    //- el-tag 平台客服
+    //- el-form.mt-15.w-66
+      el-form-item(label="客服二维码")
+        single-pic-upload(v-model="wxImg", :extra="{ imgType: 'platform_wx_service' }")
+    .mt-15
+      el-tag 返现设置
     el-form.mt-15.w-66
       el-form-item(label="返现天数")
         el-input(type="number", :step="1", placeholder="必须大于当天", v-model="localObj.backToMerchantTime", style="max-width: 300px")
@@ -49,8 +54,12 @@
 
 <script>
 import { mapState } from 'vuex'
+import singlePicUpload from '@/components/SinglePicUpload.vue'
 export default {
   layout: 'backend',
+  components: {
+    singlePicUpload
+  },
   data() {
     return {
       localObj: {},
@@ -58,7 +67,8 @@ export default {
       rp1: 1,
       rp2: 1,
       rp3: 1,
-      rp4: 1
+      rp4: 1,
+      wxImg: {}
     }
   },
   computed: {
@@ -85,16 +95,9 @@ export default {
           this.rp2 = this.localObj.rpa2 || 1
           this.rp3 = this.localObj.rpa3 || 1
           this.rp4 = this.localObj.rpa4 || 1
-          console.log(
-            this.rp1,
-            '; r2:>.',
-            this.rp2,
-            '; r3:>>',
-            this.rp3,
-            '; r4:>>',
-            this.rp4
-          )
           this.switchToggle = this.localObj.commissionType === 1
+          if (this.localObj.wxService)
+            this.wxImg = Object.assign({}, this.localObj.wxService)
         } else {
           this.msgShow(this, data.message)
         }
@@ -114,6 +117,12 @@ export default {
           this.msgShow(this, '返现天数不能小于当天')
           return
         }
+        // if (!(this.wxImg.id && this.wxImg.id > 0)) {
+        //   this.msgShow(this, '平台客服不能为空')
+        //   return
+        // }
+        // this.localObj.wxService = Number(this.wxImg.id)
+        delete this.localObj.wxService
         this.localObj.bucket = this.localObj.bucket.id || this.localObj.bucket
         this.localObj.rpa1 = this.rp1
         this.localObj.rpa2 = this.rp2

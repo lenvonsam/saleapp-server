@@ -11,6 +11,8 @@
             el-option(label="全部", value="-1")
             el-option(label="待支付", value="0")
             el-option(label="待核销", value="1")
+            //- el-option(label="待发货", value="7")
+            //- el-option(label="已发货", value="8")
             el-option(label="已完成", value="2")
       .col.pr-10
         div
@@ -81,6 +83,10 @@ export default {
                 return '待支付'
               } else if (row.status === 1) {
                 return '待核销'
+              } else if (row.status === 7) {
+                return '待发货'
+              } else if (row.status === 8) {
+                return '已发货'
               } else {
                 return '已完成'
               }

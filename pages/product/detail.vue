@@ -9,6 +9,10 @@
     el-tag.mt-15 商品详情
     .mt-15.border.relative-position(style="height: 300px; overflow: hidden;")
       .padding-sm(style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: auto;", v-html="formObj.intro")
+    template(v-if="formObj.type > 1")
+      el-tag.mt-15 购买须知
+      .mt-15.border.relative-position(style="height: 300px; overflow: hidden;")
+        .padding-sm(style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: auto;", v-html="formObj.noticeInfo")
     template(v-if="formObj.id > 0")
       el-tag.mt-15 商品封面/分享图
       el-row.mt-15
@@ -87,6 +91,21 @@ export default {
             type: 'self',
             factValue(self) {
               return self.minSale + '~' + self.maxSale
+            }
+          }
+        ],
+        [
+          {
+            lbl: '商品类型',
+            type: 'self',
+            factValue(self) {
+              if (self.type === 1) {
+                return '引流'
+              } else if (self.type === 2) {
+                return '普通(非物流)'
+              } else {
+                return '普通(物流)'
+              }
             }
           }
         ]

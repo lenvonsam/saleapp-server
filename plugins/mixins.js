@@ -29,6 +29,10 @@ function keyFilter(key, value) {
         return '待支付'
       } else if (value.status === 1) {
         return '待核销'
+      } else if (value.status === 7) {
+        return '待发货'
+      } else if (value.status === 8) {
+        return '已发货'
       } else {
         return '已完成'
       }
