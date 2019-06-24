@@ -16,7 +16,7 @@
             .preview-toolbar 实时预览
             .preview-container
               .preview-content(v-html="activityRichContent")
-        el-form-item(label="所属大类")
+        el-form-item(label="所属大类", v-if="formObj.id > 2")
           el-select(v-model="classifyName", placeholder="请输入大类名称", filterable, multiple, v-if="remoteClassifies.length > 0")
             el-option(v-for="clf in remoteClassifies", :key="clf.id", :label="clf.name", :value="clf.id")
 </template>
