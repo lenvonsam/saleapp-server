@@ -93,6 +93,7 @@ export default {
       this.$emit('currentStepIndex', this.stepIdx)
     },
     nextStep() {
+      const me = this
       let filterArr = this.originMenuData.filter(itm =>
         this.chooseData.includes(itm.id)
       )
@@ -103,7 +104,14 @@ export default {
       this.menuGroupList = _.groupBy(filterArr, itm => {
         return itm.parent ? itm.parent.id : 'null'
       })
-      this.menuList = Object.assign([], filterArr)
+      this.menuList = []
+      Object.keys(this.menuGroupList).map(k => {
+        const arr = me.menuGroupList[k]
+        arr.map(itm => {
+          me.menuList.push(itm)
+        })
+      })
+      console.log('menulist:>>', this.menuList)
       this.stepIdx = 2
       console.log(this.auths)
       if (this.auths && this.auths.length > 0) {
@@ -130,6 +138,7 @@ export default {
       this.$emit('currentStepIndex', this.stepIdx)
     },
     tableRowSpan({ row, column, rowIndex, columnIndex }) {
+      debugger
       if (columnIndex === 0) {
         let firstName = row.parent
           ? this.menuGroupList[row.parent.id][0].name

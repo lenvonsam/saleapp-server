@@ -5,6 +5,8 @@
       .col.pr-10
         div
           el-input(placeholder="订单编号", v-model="orderNo")
+        .mt-10
+          el-input(placeholder="商品名称", v-model="productName")
       .col.pr-10
         div
           el-select.full-width(placeholder="订单状态", v-model="billStatus")
@@ -14,9 +16,13 @@
             //- el-option(label="待发货", value="7")
             //- el-option(label="已发货", value="8")
             el-option(label="已完成", value="2")
+        .mt-10
+          el-date-picker.full-width(v-model="startDate" type="date", placeholder="开始时间", value-format="yyyy-MM-dd")
       .col.pr-10
         div
           el-input(placeholder="手机号", v-model="phone")
+        .mt-10
+          el-date-picker.full-width(v-model="endDate" type="date", placeholder="结束时间", value-format="yyyy-MM-dd")
       .flex-180.text-center
         el-button(size="medium", @click="resetSearch") 重置
         el-button(type="primary", size="medium", @click="loadData") 搜索
@@ -32,6 +38,9 @@ export default {
       billStatus: '-1',
       orderNo: '',
       phone: '',
+      productName: '',
+      startDate: '',
+      endDate: '',
       tableValue: {
         actions: [
           {
@@ -175,6 +184,10 @@ export default {
         if (Number(this.billStatus) > -1) body.status = Number(this.billStatus)
         if (this.phone.toString().trim().length > 0)
           body.phoneNo = this.phone.trim()
+        if (this.productName.toString().trim().length > 0)
+          body.productName = this.productName
+        if (this.startDate.length > 0) body.startDate = this.startDate
+        if (this.endDate.length > 0) body.endDate = this.endDate
         let { data } = await this.proxy(
           this,
           this.apiList.billExcel,
@@ -196,6 +209,9 @@ export default {
     resetSearch() {
       ;(this.billStatus = '-1'), (this.orderNo = '')
       this.phone = ''
+      this.productName = ''
+      this.startDate = ''
+      this.endDate = ''
       // this.currentPage = 0
       // // this.loadData()
     },
@@ -216,6 +232,10 @@ export default {
         if (Number(this.billStatus) > -1) body.status = Number(this.billStatus)
         if (this.phone.toString().trim().length > 0)
           body.phoneNo = this.phone.trim()
+        if (this.productName.toString().trim().length > 0)
+          body.productName = this.productName
+        if (this.startDate.length > 0) body.startDate = this.startDate
+        if (this.endDate.length > 0) body.endDate = this.endDate
         let { data } = await this.proxy(this, this.apiList.bill, 'get', body)
         this.pageHide(this)
         if (data.return_code === 0) {
