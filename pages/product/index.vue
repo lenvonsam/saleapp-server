@@ -75,20 +75,20 @@ export default {
             lbl: '折扣价',
             prop: 'discountPrice'
           },
-          // {
-          //   lbl: '类型',
-          //   prop: 'type',
-          //   type: 'object',
-          //   factValue(row) {
-          //     if (row.type === 1) {
-          //       return '引流'
-          //     } else if (row.type === 2) {
-          //       return '普通(非物流)'
-          //     } else {
-          //       return '普通物流'
-          //     }
-          //   }
-          // },
+          {
+            lbl: '类型',
+            prop: 'type',
+            type: 'object',
+            factValue(row) {
+              if (row.type === 1) {
+                return '引流'
+              } else if (row.type === 2) {
+                return '普通(非物流)'
+              } else {
+                return '普通物流'
+              }
+            }
+          },
           {
             lbl: '访问量',
             prop: 'pv'

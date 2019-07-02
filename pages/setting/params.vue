@@ -35,12 +35,11 @@
     //-     label 15-20元
     //-     .mt-10
     //-       el-input-number(placeholder="请输入比例", :min="1", :max="10", v-model="rp4")
-    //- el-tag 平台客服
-    //- el-form.mt-15.w-66
+    el-tag 平台客服
+    el-form.mt-15.w-66
       el-form-item(label="客服二维码")
         single-pic-upload(v-model="wxImg", :extra="{ imgType: 'platform_wx_service' }")
-    .mt-15
-      el-tag 返现设置
+    el-tag 返现设置
     el-form.mt-15.w-66
       el-form-item(label="返现天数")
         el-input(type="number", :step="1", placeholder="必须大于当天", v-model="localObj.backToMerchantTime", style="max-width: 300px")
@@ -117,12 +116,12 @@ export default {
           this.msgShow(this, '返现天数不能小于当天')
           return
         }
-        // if (!(this.wxImg.id && this.wxImg.id > 0)) {
-        //   this.msgShow(this, '平台客服不能为空')
-        //   return
-        // }
-        // this.localObj.wxService = Number(this.wxImg.id)
-        delete this.localObj.wxService
+        if (!(this.wxImg.id && this.wxImg.id > 0)) {
+          this.msgShow(this, '平台客服不能为空')
+          return
+        }
+        this.localObj.wxService = Number(this.wxImg.id)
+        // delete this.localObj.wxService
         this.localObj.bucket = this.localObj.bucket.id || this.localObj.bucket
         this.localObj.rpa1 = this.rp1
         this.localObj.rpa2 = this.rp2
