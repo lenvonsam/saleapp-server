@@ -84,6 +84,8 @@ export default {
                 return '引流'
               } else if (row.type === 2) {
                 return '普通(非物流)'
+              } else if (row.type === 4) {
+                return '卡券类'
               } else {
                 return '普通物流'
               }

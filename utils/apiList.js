@@ -48,7 +48,8 @@ module.exports = {
       sysConfig: '/backend/setting/sysConfig',
       // 订单
       bill: '/backend/bill',
-      billExcel: '/backend/bill/excel'
+      billExcel: '/backend/bill/excel',
+      billUpdateStatus: '/backend/bill/$/status'
     }
   }
 }

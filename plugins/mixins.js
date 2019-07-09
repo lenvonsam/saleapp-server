@@ -33,6 +33,8 @@ function keyFilter(key, value) {
         return '待发货'
       } else if (value.status === 8) {
         return '已发货'
+      } else if (value.status === 9) {
+        return '待充值'
       } else {
         return '已完成'
       }

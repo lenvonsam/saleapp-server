@@ -32,6 +32,7 @@
             el-option(label="引流", value="1")
             el-option(label="普通(非物流)", value="2")
             el-option(label="普通(物流)", value="3")
+            el-option(label="卡券类", value="4")
         el-form-item(label="购买须知", required, v-if="pType !== '1'")
           el-col(:span="13")
             q-editor(v-model="productNoticeContent")

@@ -31,7 +31,7 @@ div
       el-table-column(v-else-if="head.type == 'action'", :align="head.align ? head.align : 'left'" :fixed="head.fixed", label="操作", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
         template(slot-scope="scope")
           template(v-for="btn in head.actionBtns")
-            el-button(type="text", :class="btn.class ? btn.class : 'default'", @click="handleRowBtn(scope.$index, scope.row, btn.type)") {{btn.lbl}}
+            el-button(type="text", :class="btn.class ? btn.class : 'default'", @click="handleRowBtn(scope.$index, scope.row, btn.type)", v-if="showRowBtn(btn, scope.row)") {{btn.lbl}}
       el-table-column(v-else-if="head.type == 'date'", :label="head.lbl", :prop="head.prop")
         template(slot-scope="scope")
           span {{date2Str(scope.row[head.prop])}}
@@ -107,6 +107,13 @@ export default {
     })
   },
   methods: {
+    showRowBtn(btnObj, rowObj) {
+      if (btnObj.showBtn) {
+        return btnObj.showBtn(rowObj)
+      } else {
+        return true
+      }
+    },
     openRowImgModal(url) {
       this.rowImgPath = url
       this.previewShow = true

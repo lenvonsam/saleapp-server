@@ -15,6 +15,7 @@
             el-option(label="待核销", value="1")
             el-option(label="待发货", value="7")
             el-option(label="已发货", value="8")
+            el-option(label="待充值", value="9")
             el-option(label="已完成", value="2")
         .mt-10
           el-date-picker.full-width(v-model="startDate" type="date", placeholder="开始时间", value-format="yyyy-MM-dd")
@@ -26,7 +27,7 @@
       .flex-180.text-center
         el-button(size="medium", @click="resetSearch") 重置
         el-button(type="primary", size="medium", @click="loadData") 搜索
-  b-table.mt-15(:tableValue="tableValue", :rightPart="false", @actionBtnClick="actionBtns", :total="total", @pageChange="pgChange")
+  b-table.mt-15(:tableValue="tableValue", :rightPart="false", @actionBtnClick="actionBtns", :total="total", @pageChange="pgChange", @rowEdit="tableRowEdit")
 </template>
 
 <script>
@@ -96,10 +97,16 @@ export default {
                 return '待发货'
               } else if (row.status === 8) {
                 return '已发货'
+              } else if (row.status === 9) {
+                return '待充值'
               } else {
                 return '已完成'
               }
             }
+          },
+          {
+            lbl: '充值号码',
+            prop: 'quanPhone'
           },
           {
             lbl: '所属商户',
@@ -124,6 +131,18 @@ export default {
           {
             lbl: '好友电话',
             prop: 'givenPhone'
+          },
+          {
+            type: 'action',
+            actionBtns: [
+              {
+                lbl: '确认已充值',
+                type: 'quanCharge',
+                showBtn(value) {
+                  return value.productType === 4 && value.status === 9
+                }
+              }
+            ]
           }
         ],
         tableData: []
@@ -142,6 +161,38 @@ export default {
     this.loadData()
   },
   methods: {
+    tableRowEdit(idx, row, type) {
+      console.log(type)
+      const me = this
+      if (type === 'quanCharge') {
+        this.confirmDialog(this, '您确认是否充值完毕，一旦确认将无法修改')
+          .then(() => {
+            console.log('confirm')
+            me.callBillStatus(row.id)
+          })
+          .catch(err => {
+            console.log('取消')
+          })
+      }
+    },
+    async callBillStatus(id) {
+      try {
+        this.pageShow(this)
+        let url = this.apiList.billUpdateStatus.replace('$', id)
+        let { data } = await this.proxy(this, url, 'put', {
+          status: 3
+        })
+        this.pageHide(this)
+        if (data.return_code === 0) {
+          this.msgShow(this, '操作成功', 'success')
+          this.loadData()
+        }
+      } catch (e) {
+        console.log(e)
+        this.pageHide(this)
+        this.msgShow(this, e.message || '网络异常')
+      }
+    },
     actionBtns(type) {
       if (type === 'excel') {
         let theader = [
@@ -152,6 +203,7 @@ export default {
           '联系电话',
           '下单时间',
           '订单状态',
+          '充值号码',
           '所属商户',
           '是否赠好友',
           '好友姓名',
@@ -165,6 +217,7 @@ export default {
           'buyerPhone',
           'createAt',
           'billStatus',
+          'quanPhone',
           'billMerchant',
           'canGiven',
           'givenName',
