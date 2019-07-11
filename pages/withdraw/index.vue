@@ -7,17 +7,17 @@
           div
             el-button(size="small", @click="topBtnHandler('excel')") 全部导出
           el-tag.mt-15 待处理
-          b-table.mt-15(:tableValue="userTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="userTotal", @actionBtnClick="topBtnHandler")
+          b-table.mt-15(:tableValue="userTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="userTotal", @actionBtnClick="topBtnHandler", :currentPage="userCurrentPage", @pageChange="userPgChange")
           el-tag.mt-15 已处理
-          b-table.mt-15(:tableValue="userdTableValue", :rightPart="false",  :total="userdTotal")
+          b-table.mt-15(:tableValue="userdTableValue", :rightPart="false",  :total="userdTotal", :currentPage="userdCurrentPage", @pageChange="userdPgChange")
       el-tab-pane(label="商户提现", name="merchant")
         .padding.pt-0
           div
             el-button(size="small", @click="topBtnHandler('excel')") 全部导出
           el-tag.mt-15 待处理
-          b-table.mt-15(:tableValue="merchantTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="merchantTotal", @actionBtnClick="topBtnHandler")
+          b-table.mt-15(:tableValue="merchantTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="merchantTotal", @actionBtnClick="topBtnHandler", :currentPage="merchantCurrentPage", @pageChange="merchantPgChange")
           el-tag.mt-15 已处理
-          b-table.mt-15(:tableValue="merchantdTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="merchantdTotal")
+          b-table.mt-15(:tableValue="merchantdTableValue", @rowEdit="tableRowEdit", :rightPart="false",  :total="merchantdTotal", :currentPage="merchantdCurrentPage", @pageChange="merchantdPgChange")
 
 
 </template>
@@ -30,7 +30,7 @@ export default {
     return {
       activeName: 'user',
       userTotal: 0,
-      userCurrentPage: 0,
+      userCurrentPage: 1,
       userTableValue: {
         hasCbx: true,
         // actions: [
@@ -95,6 +95,11 @@ export default {
           {
             lbl: '银行卡号',
             prop: 'bankNo'
+          },
+          {
+            lbl: '申请时间',
+            type: 'datetime',
+            prop: 'withdrawApplyTime'
           },
           {
             lbl: '操作',
@@ -172,6 +177,11 @@ export default {
             prop: 'bankNo'
           },
           {
+            lbl: '申请时间',
+            type: 'datetime',
+            prop: 'withdrawApplyTime'
+          },
+          {
             lbl: '操作',
             type: 'action',
             actionBtns: [
@@ -192,7 +202,7 @@ export default {
         ],
         tableData: []
       },
-      merchantCurrentPage: 0,
+      merchantCurrentPage: 1,
       merchantTotal: 0,
       userdTableValue: {
         hasCbx: true,
@@ -254,6 +264,11 @@ export default {
             prop: 'bankNo'
           },
           {
+            lbl: '打款时间',
+            type: 'datetime',
+            prop: 'withdrawHandleTime'
+          },
+          {
             lbl: '状态',
             type: 'object',
             factValue(row) {
@@ -266,7 +281,7 @@ export default {
         tableData: []
       },
       userdTotal: 0,
-      userdCurrentPage: 0,
+      userdCurrentPage: 1,
       merchantdTableValue: {
         hasCbx: false,
         tableHead: [
@@ -316,6 +331,11 @@ export default {
             prop: 'bankNo'
           },
           {
+            lbl: '打款时间',
+            type: 'datetime',
+            prop: 'withdrawHandleTime'
+          },
+          {
             lbl: '状态',
             type: 'object',
             factValue(row) {
@@ -328,7 +348,7 @@ export default {
         tableData: []
       },
       merchantdTotal: 0,
-      merchantdCurrentPage: 0
+      merchantdCurrentPage: 1
     }
   },
   computed: {
@@ -340,14 +360,14 @@ export default {
   watch: {
     activeName(newVal, oldVal) {
       if (newVal === 'user') {
-        this.userCurrentPage = 0
+        this.userCurrentPage = 1
         this.loadUserData()
-        this.userdCurrentPage = 0
+        this.userdCurrentPage = 1
         this.loadUserStatusData()
       } else {
-        this.merchantCurrentPage = 0
+        this.merchantCurrentPage = 1
         this.loadMerchantData()
-        this.merchantdCurrentPage = 0
+        this.merchantdCurrentPage = 1
         this.loadMerchantStatusData()
       }
     }
@@ -359,6 +379,22 @@ export default {
     }
   },
   methods: {
+    userPgChange(val) {
+      this.userCurrentPage = val
+      this.loadUserData()
+    },
+    userdPgChange(val) {
+      this.userdCurrentPage = val
+      this.loadUserStatusData()
+    },
+    merchantPgChange(val) {
+      this.merchantCurrentPage = val
+      this.loadMerchantData()
+    },
+    merchantdPgChange(val) {
+      this.merchantdCurrentPage = val
+      this.loadMerchantStatusData()
+    },
     topBtnHandler(type) {
       if (type === 'excel') {
         let theader = []
@@ -374,6 +410,8 @@ export default {
             '开户行',
             '开户名称',
             '银行卡号',
+            '申请时间',
+            '打款时间',
             '提现状态'
           ]
           thkeys = [
@@ -386,6 +424,8 @@ export default {
             'bankName',
             'bankAcct',
             'bankNo',
+            'withdrawApplyTime',
+            'withdrawHandleTime',
             'withdrawStatus'
           ]
         } else {
@@ -398,6 +438,8 @@ export default {
             '开户行',
             '开户名称',
             '银行卡号',
+            '申请时间',
+            '打款时间',
             '提现状态'
           ]
           thkeys = [
@@ -409,6 +451,8 @@ export default {
             'bankName',
             'bankAcct',
             'bankNo',
+            'withdrawApplyTime',
+            'withdrawHandleTime',
             'withdrawStatus'
           ]
         }
@@ -429,7 +473,10 @@ export default {
         )
         this.pageHide(this)
         if (data.return_code === 0) {
-          const edata = this.excelDataFormat(thkeys, data.list, [])
+          const edata = this.excelDataFormat(thkeys, data.list, [
+            'withdrawApplyTime',
+            'withdrawHandleTime'
+          ])
           this.excelExport(theader, edata)
         } else {
           this.msgShow(this, data.message)
@@ -474,9 +521,9 @@ export default {
         this.pageHide(this)
         if (data.return_code === 0) {
           this.msgShow(this, '微信零钱转账成功', 'success')
-          this.userCurrentPage = 0
+          this.userCurrentPage = 1
           this.loadUserData()
-          this.userdCurrentPage = 0
+          this.userdCurrentPage = 1
           this.loadUserStatusData()
         } else {
           this.msgShow(this, data.message)
@@ -497,14 +544,14 @@ export default {
         this.pageHide(this)
         if (data.return_code === 0) {
           if (this.activeName === 'user') {
-            this.userCurrentPage = 0
+            this.userCurrentPage = 1
             this.loadUserData()
-            this.userdCurrentPage = 0
+            this.userdCurrentPage = 1
             this.loadUserStatusData()
           } else {
-            this.merchantCurrentPage = 0
+            this.merchantCurrentPage = 1
             this.loadMerchantData()
-            this.merchantdCurrentPage = 0
+            this.merchantdCurrentPage = 1
             this.loadMerchantStatusData()
           }
           this.msgShow(this, '操作成功', 'success')
@@ -524,7 +571,7 @@ export default {
           this.apiList.accountWithdraw,
           'get',
           {
-            currentPage: this.userCurrentPage,
+            currentPage: this.userCurrentPage - 1,
             pageSize: this.pageSize,
             bid: this.currentUser.currentBucket.id,
             type: 0
@@ -550,7 +597,7 @@ export default {
           this.apiList.accountWithdrawStatus,
           'get',
           {
-            currentPage: this.userdCurrentPage,
+            currentPage: this.userdCurrentPage - 1,
             pageSize: this.pageSize,
             bid: this.currentUser.currentBucket.id,
             type: 0
@@ -576,7 +623,7 @@ export default {
           this.apiList.accountWithdraw,
           'get',
           {
-            currentPage: this.merchantCurrentPage,
+            currentPage: this.merchantCurrentPage - 1,
             pageSize: this.pageSize,
             bid: this.currentUser.currentBucket.id,
             type: 1
@@ -602,7 +649,7 @@ export default {
           this.apiList.accountWithdrawStatus,
           'get',
           {
-            currentPage: this.merchantdCurrentPage,
+            currentPage: this.merchantdCurrentPage - 1,
             pageSize: this.pageSize,
             bid: this.currentUser.currentBucket.id,
             type: 1

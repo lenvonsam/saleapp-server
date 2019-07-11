@@ -1,6 +1,6 @@
 <template lang="pug">
 .box
-  b-table(:tableValue="tableValue", :rightPart="false", :total="total")
+  b-table(:tableValue="tableValue", :rightPart="false", :total="total", @pageChange="bottomPgChange", :currentPage="currentPage")
 </template>
 
 <script>
@@ -54,7 +54,7 @@ export default {
         ],
         tableData: []
       },
-      currentPage: 0,
+      currentPage: 1,
       total: 0
     }
   },
@@ -68,11 +68,15 @@ export default {
     this.loadData()
   },
   methods: {
+    bottomPgChange(val) {
+      this.currentPage = val
+      this.loadData()
+    },
     async loadData() {
       try {
         this.pageShow(this)
         let body = {
-          currentPage: this.currentPage,
+          currentPage: this.currentPage - 1,
           pageSize: this.pageSize,
           bid: this.currentUser.currentBucket.id
         }
