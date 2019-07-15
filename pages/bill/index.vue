@@ -16,7 +16,7 @@
             el-option(label="待发货", value="7")
             el-option(label="已发货", value="8")
             el-option(label="待充值", value="9")
-            el-option(label="已完成", value="2")
+            el-option(label="已完成", value="3")
         .mt-10
           el-date-picker.full-width(v-model="startDate" type="date", placeholder="开始时间", value-format="yyyy-MM-dd")
       .col.pr-10

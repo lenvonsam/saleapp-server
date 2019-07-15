@@ -32,6 +32,7 @@ module.exports = {
       activityForm: '/backend/activity/form',
       activityFormExcel: '/backend/activity/formExcel',
       activityProductDel: '/backend/activity/$/product',
+      activityProductLimitUpdate: '/backend/activity/$/product/limit',
       // 商户
       merchant: '/backend/account/merchant',
       merchantDetail: '/backend/account/merchant/',

@@ -13,13 +13,22 @@
     template(v-else-if="rowType == 'addProduct'")
       el-form
         el-form-item(label="商品名称")
-          el-select(v-model="dropdownVal", placeholder="请输入商品名称", filterable, multiple, remote, :remote-method="remoteProducts", style="width: 80%")
+          el-select(v-model="dropdownVal", placeholder="请输入商品名称", filterable, remote, :remote-method="remoteProducts", style="width: 80%")
             el-option(v-for="p in productArray", :key="p.id", :label="p.title", :value="p.id")
+        el-form-item(label="限购数量")
+          el-input-number(placeholder="请输入限购数量", v-model="productLimitCount", :step="1", :min="0")
     template(v-else-if="rowType == 'products'")
       b-table(:tableValue="activityProducts", :rightPart="false", @rowEdit="activityProductRowEdit")
     div(slot="footer")
       el-button(@click="dialogShow = false") 取消
       el-button(type="primary", @click="dialogConfirm") 确定
+  el-dialog(:visible.sync="limitDialog")
+    el-form
+      el-form-item(label="请修改限购数量")
+        el-input-number(v-model="editProductLimitCount", :step="1", :min="0")
+    div(slot="footer")
+      el-button(@click="limitDialog = false") 取消
+      el-button(type="primary", @click="callUpdateActivityProductLimit") 确定
   </span>
 </template>
 
@@ -100,6 +109,11 @@ export default {
       }
     ]
     return {
+      // 商品活动限购数量
+      productLimitCount: 0,
+      limitDialog: false,
+      pid: 0,
+      editProductLimitCount: 0,
       tableValue: {
         actions: [
           {
@@ -126,7 +140,8 @@ export default {
       rowType: '',
       currentObj: '',
       productArray: [],
-      dropdownVal: [],
+      // dropdownVal: [],
+      dropdownVal: '',
       activityProducts: {
         hasCbx: false,
         footerHide: true,
@@ -134,9 +149,10 @@ export default {
           {
             lbl: '封面图',
             type: 'image',
-            prop: 'coverImages',
+            // prop: 'coverImages',
+            prop: 'coverUrl',
             factValue(row) {
-              return row.url
+              return row
             }
           },
           {
@@ -156,9 +172,17 @@ export default {
             prop: 'discountPrice'
           },
           {
+            lbl: '限购数量',
+            prop: 'limitCount'
+          },
+          {
             lbl: '操作',
             type: 'action',
             actionBtns: [
+              {
+                lbl: '修改限量',
+                type: 'editLimit'
+              },
               {
                 lbl: '移出活动',
                 type: 'delete'
@@ -202,6 +226,41 @@ export default {
     activityProductRowEdit(idx, row, type) {
       if (type === 'delete') {
         this.deleteActivityOneProduct(row.id)
+      }
+      if (type === 'editLimit') {
+        this.editProductLimitCount = row.limitCount
+        this.pid = row.id
+        this.limitDialog = true
+      }
+    },
+    async callUpdateActivityProductLimit() {
+      try {
+        this.pageShow(this)
+        let url = this.apiList.activityProductLimitUpdate.replace(
+          '$',
+          this.currentObj.id
+        )
+        let { data } = await this.proxy(this, url, 'put', {
+          pid: this.pid,
+          count: this.editProductLimitCount
+        })
+        this.pageHide(this)
+        this.limitDialog = false
+        this.pid = 0
+        this.editProductLimitCount = 0
+        if (data.return_code === 0) {
+          this.msgShow(this, '修改成功', 'success')
+          this.callActivityProducts(this.currentObj.id)
+        } else {
+          this.msgShow(this, data.message)
+        }
+      } catch (e) {
+        console.log(e)
+        this.pageHide(this)
+        this.limitDialog = false
+        this.editProductLimitCount = 0
+        this.pid = 0
+        this.msgShow(this, e.message || '网络异常')
       }
     },
     async deleteActivityOneProduct(pid) {
@@ -270,18 +329,24 @@ export default {
     },
     async callAddProduct() {
       try {
-        let ids = this.dropdownVal.join(',')
+        // let ids = this.dropdownVal.join(',')
+        console.log('xx:>>', this.dropdownVal)
+        let ids = this.dropdownVal
         let { data } = await this.proxy(
           this,
           this.apiList.activityAddProduct,
           'post',
           {
             pids: ids,
-            id: this.currentObj.id
+            id: this.currentObj.id,
+            count: this.productLimitCount,
+            bid: this.currentUser.currentBucket.id
           }
         )
         if (data.return_code === 0) {
           this.currentPage = 0
+          this.productLimitCount = 1
+          this.dropdownVal = ''
           this.loadData()
           this.msgShow(this, '新增成功', 'success')
         } else {
