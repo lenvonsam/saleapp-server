@@ -268,6 +268,7 @@ export default {
           if (this.formObj.banners.length > 0)
             this.bannerImg = Object.assign([], this.formObj.banners)
           if (this.formObj.intro) this.productRichContent = this.formObj.intro
+          this.platformRatio = this.formObj.platformRatio || 1
           this.maxSale = this.formObj.maxSale
           this.minSale = this.formObj.minSale
           this.pType = this.formObj.type + ''

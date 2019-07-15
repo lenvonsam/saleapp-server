@@ -1,6 +1,6 @@
 <template lang="pug">
 .box 
-  b-table(:tableValue="tableValue", @rowEdit="tableRowEdit", :rightPart="false", @actionBtnClick="actionBtns", :total="total", @chooseData="chooseItems")
+  b-table(:tableValue="tableValue", @rowEdit="tableRowEdit", :rightPart="false", @actionBtnClick="actionBtns", :total="total", @chooseData="chooseItems", @pageChange="pgChange")
   el-dialog(:visible.sync="dialogShow")
     template(v-if="rowType == 'addComment'")
       el-form(style="width: 60%;margin-left: 5%", :model="commentObj", :rules="commentRuels", ref="commentForm")
@@ -136,7 +136,7 @@ export default {
         ],
         tableData: []
       },
-      currentPage: 0,
+      currentPage: 1,
       total: 0,
       chooseProducts: [],
       dialogShow: false,
@@ -189,6 +189,10 @@ export default {
     this.loadData()
   },
   methods: {
+    pgChange(val) {
+      this.currentPage = val
+      this.loadData()
+    },
     chooseItems(val) {
       console.log('items:>>', val)
       this.chooseProducts = val
@@ -274,7 +278,7 @@ export default {
       try {
         this.pageShow(this)
         let body = {
-          currentPage: this.currentPage,
+          currentPage: this.currentPage - 1,
           pageSize: this.pageSize
         }
         let { data } = await this.proxy(this, this.apiList.product, 'get', body)

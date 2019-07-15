@@ -176,12 +176,16 @@ export default {
         this.formEditType = 2
         if (this.bannerType === '1') this.outlink = this.editObj.url
         if (this.bannerType === '2') {
-          let arr = this.editObj.productUrl.split('?')
-          // console.log('arr:>>', arr)
-          // this.productName = Number(
-          //   arr[0].substring(arr[0].lastIndexOf('/') + 1)
-          // )
-          this.activityName = Number(arr[1].substring(arr[1].indexOf('=') + 1))
+          if (this.editObj.productUrl) {
+            let arr = this.editObj.productUrl.split('?')
+            // console.log('arr:>>', arr)
+            // this.productName = Number(
+            //   arr[0].substring(arr[0].lastIndexOf('/') + 1)
+            // )
+            this.activityName = Number(
+              arr[1].substring(arr[1].indexOf('=') + 1)
+            )
+          }
         }
         this.dialogVisible = true
       }

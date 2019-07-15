@@ -1,6 +1,6 @@
 <template lang="pug">
 .box
-  b-table(:tableValue="tableValue", @rowEdit="tableRowEdit", :rightPart="false", @actionBtnClick="actionBtns")
+  b-table(:tableValue="tableValue", @rowEdit="tableRowEdit", :rightPart="false", @actionBtnClick="actionBtns", :currentPage="currentPage", :total="total", @pageChange="bottomPgChange")
 </template>
 
 <script>
@@ -74,7 +74,8 @@ export default {
         ],
         tableData: []
       },
-      currentPage: 0
+      currentPage: 1,
+      total: 0
     }
   },
   computed: {
@@ -87,6 +88,10 @@ export default {
     this.loadData()
   },
   methods: {
+    bottomPgChange(val) {
+      this.currentPage = val
+      this.loadData()
+    },
     actionBtns(type) {
       if (type === 'create') {
         this.jump({ path: '/merchant/form?type=new' })
@@ -101,7 +106,7 @@ export default {
       try {
         this.pageShow(this)
         let body = {
-          currentPage: this.currentPage,
+          currentPage: this.currentPage - 1,
           pageSize: this.pageSize,
           bid: this.currentUser.currentBucket.id
         }
@@ -114,6 +119,7 @@ export default {
         this.pageHide(this)
         if (data.return_code === 0 && data.list.length > 0) {
           this.tableValue.tableData = data.list
+          this.total = data.total
         } else {
           this.tableValue.tableData = []
           this.currentPage--
