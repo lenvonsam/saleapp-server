@@ -109,6 +109,10 @@ export default {
             prop: 'quanPhone'
           },
           {
+            lbl: '订单备注',
+            prop: 'remark'
+          },
+          {
             lbl: '所属商户',
             prop: 'product',
             type: 'object',
@@ -204,6 +208,7 @@ export default {
           '下单时间',
           '订单状态',
           '充值号码',
+          '订单备注',
           '所属商户',
           '是否赠好友',
           '好友姓名',
@@ -218,6 +223,7 @@ export default {
           'createAt',
           'billStatus',
           'quanPhone',
+          'remark',
           'billMerchant',
           'canGiven',
           'givenName',
