@@ -18,7 +18,7 @@ const port = process.env.PORT || 4000
 // local url
 // const bkProxyUrl = 'http://localhost:8666'
 // dev url
-const bkProxyUrl = 'http://94.191.88.227:8080/saleappdev-server'
+const bkProxyUrl = 'http://94.191.88.227:8080/saleapp-server'
 const APILIST = require('../utils/apiList').api()
 
 // Import and Set Nuxt.js options
@@ -28,9 +28,9 @@ config.dev = !(app.env === 'production')
 // session database
 // local model
 var sqlBody = {
-  user: 'koadev',
-  password: 'koadev',
-  database: 'koa_dev',
+  user: 'koas',
+  password: 'koas',
+  database: 'koa_session',
   host: '94.191.88.227'
   // host: '127.0.0.1'
 }
