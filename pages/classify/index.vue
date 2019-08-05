@@ -52,6 +52,10 @@ export default {
               {
                 lbl: '编辑',
                 type: 'edit'
+              },
+              {
+                lbl: '删除',
+                type: 'delete'
               }
             ]
           }
@@ -144,12 +148,27 @@ export default {
       )
     },
     tableRowEdit(idx, obj, type) {
-      this.formObj = {
-        id: obj.id,
-        name: obj.name
+      console.log('type', type)
+      if (type === 'edit') {
+        this.formObj = {
+          id: obj.id,
+          name: obj.name
+        }
+        if (obj.iconImg && obj.iconImg.id > 0) this.classifyImg = obj.iconImg
+        this.dialogVisible = true
+      } else if (type === 'delete') {
+        const me = this
+        this.confirmDialog(
+          this,
+          '一旦删除，所属该类的活动关联关系都将解除。 您确认要删除吗？'
+        )
+          .then(() => {
+            me.deleteObj(obj.id)
+          })
+          .catch(() => {
+            console.log('取消')
+          })
       }
-      if (obj.iconImg && obj.iconImg.id > 0) this.classifyImg = obj.iconImg
-      this.dialogVisible = true
     },
     dialogClose() {
       this.dialogVisible = false
@@ -163,6 +182,26 @@ export default {
       this.formObj.iconImg = this.classifyImg.id
       this.dialogVisible = false
       this.saveOrUpdate()
+    },
+    async deleteObj(id) {
+      try {
+        let { data } = await this.proxy(
+          this,
+          this.apiList.classifyDelete + id,
+          'delete',
+          {}
+        )
+        if (data.return_code === 0) {
+          this.msgShow(this, '删除成功', 'success')
+          this.currentPage = 1
+          this.loadData()
+        } else {
+          this.msgShow(this, data.message)
+        }
+      } catch (e) {
+        console.log(e)
+        this.msgShow(this, e.message || '网络异常')
+      }
     },
     async saveOrUpdate() {
       try {

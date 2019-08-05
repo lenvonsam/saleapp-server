@@ -23,6 +23,7 @@ module.exports = {
       roleBucket: '/backend/role/bucket',
       // 活动大类
       classify: '/backend/activity/classify',
+      classifyDelete: '/backend/activity/classify/',
       activity: '/backend/activity',
       activityDetail: '/backend/activity/',
       activityAddProduct: '/backend/activity/addProducts',

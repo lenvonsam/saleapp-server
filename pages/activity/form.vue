@@ -16,6 +16,8 @@
             .preview-toolbar 实时预览
             .preview-container
               .preview-content(v-html="activityRichContent")
+        el-form-item(label="活动小图标")
+          single-pic-upload(v-model="iconImg", :extra="{imgType: 'activityIcon'}", :picAdvice="'40 * 40'")
         el-form-item(label="所属大类", v-if="formObj.id > 2")
           el-select(v-model="classifyName", placeholder="请输入大类名称", filterable, multiple, v-if="remoteClassifies.length > 0")
             el-option(v-for="clf in remoteClassifies", :key="clf.id", :label="clf.name", :value="clf.id")
@@ -52,6 +54,7 @@ export default {
       },
       formObj: {},
       logoImg: {},
+      iconImg: {},
       activityRichContent: '',
       classifyName: [],
       remoteClassifies: [],
@@ -120,6 +123,11 @@ export default {
       } else {
         this.formObj.strategy = this.activityRichContent
       }
+      if (this.iconImg.id > 0) {
+        this.formObj.smallIcon = this.iconImg.id
+      } else {
+        delete this.formObj.smallIcon
+      }
       this.formObj.bucket = this.currentUser.currentBucket.id
       console.log('parent ids:>>', this.formObj.parentIds)
       this.saveOrUpdate()
@@ -143,6 +151,8 @@ export default {
           if (this.formObj.classifies.length > 0) {
             this.classifyName = this.formObj.classifies.map(itm => itm.id)
           }
+          if (this.formObj.smallIcon)
+            this.iconImg = Object.assign({}, this.formObj.smallIcon)
           console.log('form obj', this.formObj)
           this.$forceUpdate()
         } else {
