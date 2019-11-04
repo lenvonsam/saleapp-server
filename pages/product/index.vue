@@ -224,7 +224,7 @@ export default {
         )
         if (data.return_code === 0) {
           this.msgShow(this, '操作成功', 'success')
-          this.currentPage = 0
+          this.currentPage = 1
           this.loadData()
         } else {
           this.msgShow(this, data.message)
