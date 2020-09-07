@@ -29,13 +29,13 @@ config.dev = !(app.env === 'production')
 // session database
 // local model
 var sqlBody = {
-  // user: 'koas',
-  // password: 'koas',
-  user: 'koa_session',
-  password: '4w6RpphSGkh6SADz',
+  user: 'koas',
+  password: 'koas',
+  // user: 'koa_session',
+  // password: '4w6RpphSGkh6SADz',
   database: 'koa_session',
   // host: '94.191.88.227'
-  host: '172.81.210.107'
+  host: '121.42.138.220'
   // host: '127.0.0.1'
 }
 let store = new MysqlSession(sqlBody)
